@@ -1,0 +1,149 @@
+﻿'MDS.exe': Loaded 'C:\Users\Administrator\Desktop\ekac230_EK258_AutoTest\ekac230_EK258_AutoTest\Debug\MDS.exe', Symbols loaded.
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\ntdll.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\kernel32.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\KernelBase.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Users\Administrator\Desktop\ekac230_EK258_AutoTest\ekac230_EK258_AutoTest\Debug\SentinelKeyW.DLL', Binary was not built with debug information.
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\user32.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\gdi32.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\lpk.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\usp10.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\msvcrt.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\advapi32.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\sechost.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\rpcrt4.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\sspicli.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\cryptbase.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\mfc100d.dll', Symbols loaded.
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\msvcr100d.dll', Symbols loaded.
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\shlwapi.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\winsxs\x86_microsoft.windows.common-controls_6595b64144ccf1df_5.82.7601.18837_none_ec86b8d6858ec0bc\comctl32.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\msimg32.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\ole32.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\oleaut32.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\msvcp100d.dll', Symbols loaded.
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\imm32.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\msctf.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\comdlg32.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\shell32.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\shfolder.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\ws2_32.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\nsi.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\uxtheme.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\dwmapi.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\mfc100chs.dll', Binary was not built with debug information.
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\apphelp.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\SogouPY.ime', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\winhttp.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\webio.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\oleacc.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\api-ms-win-core-synch-l1-2-0.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\ntmarta.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\Wldap32.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\version.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\winsxs\x86_microsoft.windows.common-controls_6595b64144ccf1df_6.0.7601.18837_none_41e855142bd5705d\comctl32.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'D:\SogouInput\Components\PicFace\1.1.0.1859\PicFace.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\profapi.dll', Cannot find or open the PDB file
+The thread 'Win32 Thread' (0x8510) has exited with code 0 (0x0).
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\clbcatq.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Users\Administrator\Desktop\EKAC测试\MSCOMM32.OCX', Cannot find or open a required DBG file.
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\sxs.dll', Cannot find or open the PDB file
+Warning: initial dialog data is out of range.
+Warning: skipping non-radio button in group.
+'MDS.exe': Loaded 'D:\SogouInput\9.3.0.3129\Resource.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\psapi.dll', Cannot find or open the PDB file
+The thread 'Win32 Thread' (0x8fd0) has exited with code 0 (0x0).
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\propsys.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\urlmon.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\wininet.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\iertutil.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\crypt32.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\msasn1.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\setupapi.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\cfgmgr32.dll', Cannot find or open the PDB file
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\devobj.dll', Cannot find or open the PDB file
+Warning: skipping non-radio button in group.
+The thread 'Win32 Thread' (0x8b54) has exited with code 0 (0x0).
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+'MDS.exe': Loaded 'C:\Windows\SysWOW64\UIAutomationCore.dll', Cannot find or open the PDB file
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+Warning: skipping non-radio button in group.
+The thread 'Win32 Thread' (0x8464) has exited with code 1 (0x1).
+'MDS.exe': Unloaded 'C:\Users\Administrator\Desktop\EKAC测试\MSCOMM32.OCX'
+The thread 'Win32 Thread' (0x7e08) has exited with code 0 (0x0).
+The thread 'Win32 Thread' (0x8654) has exited with code 0 (0x0).
+The thread 'Win32 Thread' (0x6e80) has exited with code 0 (0x0).
+The thread 'Win32 Thread' (0x8ba4) has exited with code 0 (0x0).
+The thread 'Win32 Thread' (0x8ae8) has exited with code 0 (0x0).
+The thread 'Win32 Thread' (0x8254) has exited with code 0 (0x0).
+The thread 'Win32 Thread' (0x5914) has exited with code 0 (0x0).
+The thread 'Win32 Thread' (0x8b2c) has exited with code 0 (0x0).
+The thread 'Win32 Thread' (0x8770) has exited with code 0 (0x0).
+The thread 'Win32 Thread' (0x6a8c) has exited with code 0 (0x0).
+Detected memory leaks!
+Dumping objects ->
+c:\users\administrator\desktop\ekac230_ek258_autotest\ekac230_ek258_autotest\mdsview.cpp(48) : {533} normal block at 0x004C9040, 10 bytes long.
+ Data: <          > CD CD CD CD CD CD CD CD CD CD 
+c:\users\administrator\desktop\ekac230_ek258_autotest\ekac230_ek258_autotest\mdsview.cpp(44) : {532} normal block at 0x004C8FF8, 12 bytes long.
+ Data: <            > CD CD CD CD CD CD CD CD CD CD CD CD 
+Object dump complete.
+The program '[35928] MDS.exe: Native' has exited with code 0 (0x0).

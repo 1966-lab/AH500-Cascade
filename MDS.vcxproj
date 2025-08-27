@@ -1,0 +1,260 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <SccProjectName />
+    <SccLocalPath />
+    <Keyword>MFCProj</Keyword>
+    <ProjectGuid>{5C90C4E5-DB31-359C-A91D-4A44B9AD1626}</ProjectGuid>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v100</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>NotSet</CharacterSet>
+    <PlatformToolset>v100</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>.\Debug\</OutDir>
+    <IntDir>.\Debug\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>.\Release\</OutDir>
+    <IntDir>.\Release\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <Optimization>Disabled</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <MinimalRebuild>true</MinimalRebuild>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\Debug\</AssemblerListingLocation>
+      <PrecompiledHeaderOutputFile>.\Debug\MDS.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <ObjectFileName>.\Debug\</ObjectFileName>
+      <ProgramDataBaseFileName>.\Debug\</ProgramDataBaseFileName>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <AdditionalIncludeDirectories>E:\AH500_Cascade\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Midl>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TypeLibraryName>.\Debug\MDS.tlb</TypeLibraryName>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <TargetEnvironment>Win32</TargetEnvironment>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0804</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Debug\MDS.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OutputFile>.\Debug\MDS.exe</OutputFile>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+      <AdditionalLibraryDirectories>E:\AH500_Cascade\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <StringPooling>true</StringPooling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <Optimization>MaxSpeed</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\Release\</AssemblerListingLocation>
+      <BrowseInformation>true</BrowseInformation>
+      <PrecompiledHeaderOutputFile>.\Release\MDS.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <ObjectFileName>.\Release\</ObjectFileName>
+      <ProgramDataBaseFileName>.\Release\</ProgramDataBaseFileName>
+    </ClCompile>
+    <Midl>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TypeLibraryName>.\Release\MDS.tlb</TypeLibraryName>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <TargetEnvironment>Win32</TargetEnvironment>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0804</Culture>
+      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Release\MDS.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <SubSystem>Windows</SubSystem>
+      <OutputFile>.\Release\MDS.exe</OutputFile>
+      <AdditionalDependencies>SentinelKeyW.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="AddConfig.cpp" />
+    <ClCompile Include="air.cpp" />
+    <ClCompile Include="Alarmdlg.cpp" />
+    <ClCompile Include="BaseClient.cpp" />
+    <ClCompile Include="ColorEdit.cpp" />
+    <ClCompile Include="ColorLabel.cpp" />
+    <ClCompile Include="ColorListCtrl.cpp" />
+    <ClCompile Include="Colorstatic.cpp" />
+    <ClCompile Include="compdlg.cpp" />
+    <ClCompile Include="Connectindlg.cpp" />
+    <ClCompile Include="globaldlg.cpp" />
+    <ClCompile Include="HoverEdit.cpp" />
+    <ClCompile Include="HttpClient.cpp" />
+    <ClCompile Include="HttpsClient.cpp" />
+    <ClCompile Include="Inputstrdlg.cpp" />
+    <ClCompile Include="LoginService.cpp" />
+    <ClCompile Include="MainFrm.cpp" />
+    <ClCompile Include="MDS.cpp" />
+    <ClCompile Include="MDSDoc.cpp" />
+    <ClCompile Include="MDSView.cpp" />
+    <ClCompile Include="MESSAGEBOXDLG.cpp" />
+    <ClCompile Include="mod_slave_cfg.cpp" />
+    <ClCompile Include="modoutdlg.cpp" />
+    <ClCompile Include="mscomm.cpp" />
+    <ClCompile Include="Passworddlg.cpp" />
+    <ClCompile Include="Specilcmddlg.cpp" />
+    <ClCompile Include="StaticUtility.cpp" />
+    <ClCompile Include="StdAfx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">stdafx.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="Testcodedlg.cpp" />
+    <ClCompile Include="waitpdf.cpp" />
+    <ClCompile Include="XPButton.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="MDS.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AddConfig.h" />
+    <ClInclude Include="air.h" />
+    <ClInclude Include="Alarmdlg.h" />
+    <ClInclude Include="BaseClient.h" />
+    <ClInclude Include="ColorEdit.h" />
+    <ClInclude Include="ColorLabel.h" />
+    <ClInclude Include="ColorListCtrl.h" />
+    <ClInclude Include="Colorstatic.h" />
+    <ClInclude Include="compdlg.h" />
+    <ClInclude Include="Connectindlg.h" />
+    <ClInclude Include="globaldlg.h" />
+    <ClInclude Include="HoverEdit.h" />
+    <ClInclude Include="HttpClient.h" />
+    <ClInclude Include="HttpsClient.h" />
+    <ClInclude Include="Inputstrdlg.h" />
+    <ClInclude Include="LoginService.h" />
+    <ClInclude Include="MainFrm.h" />
+    <ClInclude Include="MDS.h" />
+    <ClInclude Include="MDSDoc.h" />
+    <ClInclude Include="MDSView.h" />
+    <ClInclude Include="MESSAGEBOXDLG.h" />
+    <ClInclude Include="mod_slave_cfg.h" />
+    <ClInclude Include="modoutdlg.h" />
+    <ClInclude Include="mscomm.h" />
+    <ClInclude Include="Passworddlg.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="SentinelKeys.h" />
+    <ClInclude Include="SentinelKeysLicense.h" />
+    <ClInclude Include="SentinelKeystypes.h" />
+    <ClInclude Include="Specilcmddlg.h" />
+    <ClInclude Include="StaticUtility.h" />
+    <ClInclude Include="StdAfx.h" />
+    <ClInclude Include="Testcodedlg.h" />
+    <ClInclude Include="TrackControl.h" />
+    <ClInclude Include="waitpdf.h" />
+    <ClInclude Include="XPButton.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="animat3.ico" />
+    <CustomBuild Include="res\animat3.ico" />
+    <CustomBuild Include="res\bitmap2.bmp" />
+    <CustomBuild Include="res\codeoffb.bmp" />
+    <CustomBuild Include="res\codeonbm.bmp" />
+    <CustomBuild Include="res\fbackoff.bmp" />
+    <CustomBuild Include="res\icon1.ico" />
+    <CustomBuild Include="res\logo2.bmp" />
+    <CustomBuild Include="res\MCC-STOP.bmp" />
+    <CustomBuild Include="res\MCC-停机.bmp" />
+    <CustomBuild Include="res\MCC－COOL.bmp" />
+    <CustomBuild Include="res\MCC－HOT.bmp" />
+    <CustomBuild Include="res\MCKCOOL.bmp" />
+    <CustomBuild Include="res\MCK－HOT.bmp" />
+    <CustomBuild Include="res\MCK－STOP.bmp" />
+    <CustomBuild Include="res\MCM_COOL.bmp" />
+    <CustomBuild Include="res\MCM_HOT.bmp" />
+    <CustomBuild Include="res\MCM_STOP.bmp" />
+    <CustomBuild Include="res\McQuay.bmp" />
+    <CustomBuild Include="res\McQuayOk 5.bmp" />
+    <CustomBuild Include="res\mdbcoolb.bmp" />
+    <CustomBuild Include="res\mdbhotbm.bmp" />
+    <CustomBuild Include="res\mdbstopb.bmp" />
+    <CustomBuild Include="res\MDS.ico" />
+    <CustomBuild Include="res\MDS.rc2">
+      <FileType>RC</FileType>
+    </CustomBuild>
+    <CustomBuild Include="res\MDSDoc.ico" />
+    <CustomBuild Include="res\outdoor.bmp" />
+    <CustomBuild Include="ReadMe.txt" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="MDS.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
