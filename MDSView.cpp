@@ -732,10 +732,6 @@ void CMDSView::OnTimer(UINT nIDEvent)
 					pdoc->query_out_set(No);
 					break;
 				case 2:					//查询内机配置
-					if (theApp.m_bLanguage == 0)
-						frame->m_wndStatusBar.SetPaneText(2, "正在初始化....", TRUE);
-					else if (theApp.m_bLanguage == 1)
-						frame->m_wndStatusBar.SetPaneText(2, "Initializing....", TRUE);
 					pdoc->query_in_set(No);
 					break;
 				case 3:					//查询机组状态
@@ -857,39 +853,12 @@ void CMDSView::OnTimer(UINT nIDEvent)
 					{
 						if (pdoc->sendcmdflag != 1)
 						{
-							//if(pdoc->airlist[pdoc->queryAirNo].slave_ini==1)
-							//{
-								//if(pdoc->airlist[pdoc->queryAirNo].in_num>0)
-								//{
-								//	CTime t = CTime::GetCurrentTime();
-								//	pdoc->queryFunNo=2;//查询从机
-								///*	for(i=0;i<pdoc->airlist[pdoc->queryAirNo].in_num;i++)
-								//	{
-								//		tempstr.Format("%2.2d%.2d%.2d_%.2d\.txt",t.GetYear(),t.GetMonth(),t.GetDay(),i+1);
-								//		if(pdoc->m_file[i+1].Open(tempstr,CFile::modeReadWrite|CFile::shareDenyNone,NULL))
-								//		{
-								//			pdoc->m_file[i+1].SeekToEnd();
-								//		}
-								//		else
-								//		{
-								//			pdoc->m_file[i+1].Open(tempstr,CFile::modeReadWrite|CFile::modeCreate |CFile::shareDenyNone,NULL);
-								//			pdoc->m_recordstr.Format("记录日期:%2.2d-%.2d-%.2d\r\n机组号:%.2d\r\n机组型号:%s\r\n机组编号:%s\r\n软件版本%s\r\nF1~3---风机1~3  S1~2---电磁阀1~2  C0~3---定压机0~3 Wa~d---四通阀a~d  E1~4---电子膨胀阀\r\n过热度---实际过热度  TSH--目标过热度 HIC---HIC回路目标过冷度\r\n",t.GetYear(),t.GetMonth(),t.GetDay(),i,valstr1,valstr2,theApp.SoftVer);
-								//		//	pdoc->m_recordstr.Format("记录日期:%2.2d-%.2d-%.2d\r\n机组号:%.2d\r\nF1~3---风机1~3  S1~2---电磁阀1~2  C0~3---定压机0~3 Wa~d---四通阀a~d  E1~4---电子膨胀阀\r\n过热度---实际过热度  TSH--目标过热度 HIC---HIC回路目标过冷度\r\n",t.GetYear(),t.GetMonth(),t.GetDay(),i);
-								//			pdoc->m_recordstr+="\r\n时间    模式 F1 F2 C1 C2 C3 Wa Wb   E1   E2   E3   E4   Needhp  TSH   lowP1   过热度1  LowP2  过热度2   TH1    TH2    TH3    TH4    TH5    TH6   TH7    TH8    TH9   TH10   TH11   TH12    电流1   电流2 \r\n";
-								//			CArchive ar(&pdoc->m_file[i+1],CArchive::store);
-								//			ar.WriteString(pdoc->m_recordstr);
-								//			ar.Close();										
-								//		}
-								//	}*/
-								//}
-								//else
-								//{
 							pdoc->queryFunNo = 1;
 							pdoc->queryAirNo++;
 							if (pdoc->queryAirNo >= pdoc->airnum)
 							{
 								pdoc->queryAirNo = 0;
-								pdoc->queryFunNo = 3;
+								pdoc->queryFunNo = 2;
 								pdoc->m_startflag = 1;	//初始化完成
 								if (theApp.m_bLanguage == 0)
 									frame->m_wndStatusBar.SetPaneText(2, "初始化完成", TRUE);
@@ -914,12 +883,6 @@ void CMDSView::OnTimer(UINT nIDEvent)
 								pdoc->queryAirNo = 0;
 								pdoc->queryFunNo = 3;
 								pdoc->m_startflag = 1;	//初始化完成
-								if (theApp.m_bLanguage == 0)
-									frame->m_wndStatusBar.SetPaneText(2, "初始化完成", TRUE);
-								else if (theApp.m_bLanguage == 1)
-									frame->m_wndStatusBar.SetPaneText(2, "Initialization completed", TRUE);
-
-								refreshslave_sel(m_showNo);	//初始化完成后，设置从机的选择框
 							}
 						}
 					}
@@ -7179,7 +7142,6 @@ void CMDSView::OnTimer(UINT nIDEvent)
 				m_userinfo5.SetWindowText("");//分开字符后，清空扫码枪内容20191010				
 			}
 		}
-
 	}
 End0:
 	if (nIDEvent == 4)//定时器更新
@@ -7304,35 +7266,11 @@ void CMDSView::OnConnectbtn()
 			}
 
 		}
-		valstr3 = valstr1;//记录文件命名记录
-		valstr3.Replace('/', '-');
 		m_userinfo1.GetWindowText(valstr1);
-		valstr1.Remove(' ');
-		if (m_bFunhavelow == 0)
-		{
-			if (stricmp(valstr1, "LR550D") == 0)
-				valstr1 = "AH1600CHS1-FBB";
-
-		}
-		else
-		{
-			if (stricmp(valstr1, "ZJLR550D") == 0)
-				valstr1 = "EKAH1600CHS1-FBB";
-		}
 		m_userinfo2.GetWindowText(valstr2);
 		m_userinfo3.GetWindowText(str3);
 		m_userinfo4.GetWindowText(str4);
-		CString b, c;
-		valstr1.Remove(' ');
-		if (m_bFunhavelow == 1)
-			b = valstr1.Left(8);
-		else
-			b = valstr1.Left(6);
-		models_tag = b.Right(4);
-		if (stricmp(valstr1, "HFRW-460FGF/AE") == 0 || stricmp(valstr1, "RW-460FGF/AE") == 0)
-			models_tag = "1600";
-		if (stricmp(valstr1, "HFRW-510FGF/EH") == 0 || stricmp(valstr1, "RW-510FGF/EH") == 0)
-			models_tag = "1600";
+
 		if (valstr1 == strNull || valstr2 == strNull || str3 == strNull || str4 == strNull)
 		{
 			AfxMessageBox(_T("机组型号/机组编号/生产日期/测试人员 不能为空"));
@@ -7398,7 +7336,7 @@ void CMDSView::OnConnectbtn()
 
 		}
 		//xu161226 初始化
-		pdoc->queryFunNo = 23;//进入测试模式
+		pdoc->queryFunNo = 1;
 		pdoc->queryAirNo = 0;
 		iStep = 10;
 		for (i = 0; i != NUM_SENDCMD; i++)
@@ -7556,8 +7494,7 @@ void CMDSView::showdata(int No)
 	int v1, v2, v3;
 	v3 = pdoc->airlist[No].out_version / 10;
 	v2 = pdoc->airlist[No].out_version % 10;
-	v1 = pdoc->airlist[No].out_version_end;
-	tempstr.Format("%.1d.%.1d.%.1d", v3, v2, v1);
+	tempstr.Format("%.1d.%.1d", v3, v2);
 	m_airversion.SetWindowText(tempstr);
 
 	//内机数量  
@@ -7983,21 +7920,21 @@ void CMDSView::showdata(int No)
 	}
 	m_ehot.SetWindowText(tempstr);
 
-	//if (pdoc->airlist[No].hot_eheat == 0)
-	//{
-	//	if (theApp.m_bLanguage == 0)
-	//		tempstr.Format("关");
-	//	else if (theApp.m_bLanguage == 1)
-	//		tempstr.Format("OFF");
-	//}
-	//else
-	//{
-	//	if (theApp.m_bLanguage == 0)
-	//		tempstr.Format("开");
-	//	else if (theApp.m_bLanguage == 1)
-	//		tempstr.Format("ON");
-	//}
-	//m_edithot_eheat.SetWindowText(tempstr);
+	if (pdoc->airlist[No].hot_eheat == 0)
+	{
+		if (theApp.m_bLanguage == 0)
+			tempstr.Format("关");
+		else if (theApp.m_bLanguage == 1)
+			tempstr.Format("OFF");
+	}
+	else
+	{
+		if (theApp.m_bLanguage == 0)
+			tempstr.Format("开");
+		else if (theApp.m_bLanguage == 1)
+			tempstr.Format("ON");
+	}
+	m_edithot_eheat.SetWindowText(tempstr);
 
 	//电磁膨胀阀1开度
 	tempstr.Format("%d", pdoc->airlist[No].s_ele_distension_valve1);
@@ -8583,7 +8520,7 @@ void CMDSView::showdata(int No)
 	m_fcomp3.SetWindowText(tempstr);
 	/////////副板
 	//高压
-	tempstr.Format("%.1fBar", pdoc->airlist[No].f_s_gaoya);
+	tempstr.Format("%.1fBar", pdoc->airlist[No].f_s_gaoya1);
 	m_edit_gaoyaf1.SetWindowText(tempstr);
 	//高压2
 	tempstr.Format("%.1fBar", pdoc->airlist[No].f_s_gaoya2);

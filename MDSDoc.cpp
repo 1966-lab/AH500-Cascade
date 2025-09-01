@@ -157,17 +157,22 @@ UINT calcrc(CByteArray* bytebuf)
 //查询外机配置
 void CMDSDoc::query_out_set(int airNo)
 {
-	outbuf.SetSize(5);					    //设置输出字节大小，构造MODBUS数据格式
-	outbuf[0]=airNo;						//外机地址
-	outbuf[1]=0x01;                         //功能代码
-	outbuf[2]=0;							//字节长度				
-    crc=calcrc(&outbuf);
-	temp=crc&0x00ff;
-	outbuf[3]=temp;
-	temp=crc&0xff00;
-	temp=temp>>8;		
-	outbuf[4]=temp;
-	varOutput=outbuf;
+	int ret;
+	outbuf.SetSize(8);					    //设置输出字节大小，构造MODBUS数据格式
+	outbuf[0] = airNo + 1;							//PC直接接外机标志
+	outbuf[1] = 0x04;                         //功能代码
+	outbuf[2] = 0x00;//0x00;							//00 c8 表示从30199开始的地址
+	outbuf[3] = 0x01;//0xc7;						//
+	outbuf[4] = 0x00;
+	outbuf[5] = 0x28;
+
+	crc = calcrc(&outbuf);
+	temp = crc & 0x00ff;
+	outbuf[6] = temp;
+	temp = crc & 0xff00;
+	temp = temp >> 8;
+	outbuf[7] = temp;
+	varOutput = outbuf;
 	m_comm1.SetInBufferCount(0);
 	m_comm1.SetOutBufferCount(0);
 	m_comm1.SetOutput(varOutput);	
@@ -179,18 +184,21 @@ void CMDSDoc::query_out_set(int airNo)
 //查询内机配置
 void CMDSDoc::query_in_set(int airNo)
 {
-	outbuf.SetSize(6);					    //设置输出字节大小，构造MODBUS数据格式
-	outbuf[0]=airNo;						//机组地址
-	outbuf[1]=0x02;                         //功能代码
-	outbuf[2]=1;							//字节长度
-	outbuf[3]=airlist[airNo].in_groupquery;	//从机地址
-	crc=calcrc(&outbuf);
-	temp=crc&0x00ff;
-	outbuf[4]=temp;
-	temp=crc&0xff00;
-	temp=temp>>8;		
-	outbuf[5]=temp;
-	varOutput=outbuf;
+	int ret;
+	outbuf.SetSize(8);					    //设置输出字节大小，构造MODBUS数据格式
+	outbuf[0] = airNo + 1;							//PC直接接外机标志
+	outbuf[1] = 0x02;                         //功能代码
+	outbuf[2] = 0x00;//0x00;							//00 c8 表示从30199开始的地址
+	outbuf[3] = 0x01;//0xc7;						//
+	outbuf[4] = 0x00;
+	outbuf[5] = 0x0C;
+	crc = calcrc(&outbuf);
+	temp = crc & 0x00ff;
+	outbuf[6] = temp;
+	temp = crc & 0xff00;
+	temp = temp >> 8;
+	outbuf[7] = temp;
+	varOutput = outbuf;
 	m_comm1.SetInBufferCount(0);
 	m_comm1.SetOutBufferCount(0);
 	m_comm1.SetOutput(varOutput);
@@ -202,16 +210,19 @@ void CMDSDoc::query_in_set(int airNo)
 //查询机组运行状态
 void CMDSDoc::query_air_status(int airNo)
 {
-	outbuf.SetSize(5);					    //设置输出字节大小，构造MODBUS数据格式
-	outbuf[0] = airNo;						//外机地址
-	outbuf[1] = 0x03;                         //功能代码
-	outbuf[2] = 0;							//字节长度				
+	outbuf.SetSize(8);					    //设置输出字节大小，构造MODBUS数据格式
+	outbuf[0] = airNo + 1;							//PC直接接外机标志
+	outbuf[1] = 0x04;                         //功能代码
+	outbuf[2] = 0x00;//0x00;							//00 c8 表示从30199开始的地址
+	outbuf[3] = 0x41;//			
+	outbuf[4] = 0x00;
+	outbuf[5] = 0x6;
 	crc = calcrc(&outbuf);
 	temp = crc & 0x00ff;
-	outbuf[3] = temp;
+	outbuf[6] = temp;
 	temp = crc & 0xff00;
 	temp = temp >> 8;
-	outbuf[4] = temp;
+	outbuf[7] = temp;
 	varOutput = outbuf;
 	m_comm1.SetInBufferCount(0);
 	m_comm1.SetOutBufferCount(0);
@@ -224,17 +235,20 @@ void CMDSDoc::query_air_status(int airNo)
 //查询测试模式的输出状态
 void CMDSDoc::query_test_status(int airNo)
 {
-	outbuf.SetSize(5);					    //设置输出字节大小，构造MODBUS数据格式
-	outbuf[0]=airNo;						//外机地址
-	outbuf[1]=0x19;                         //功能代码
-	outbuf[2]=0x0;							//字节长度				
-    crc=calcrc(&outbuf);
-	temp=crc&0x00ff;
-	outbuf[3]=temp;
-	temp=crc&0xff00;
-	temp=temp>>8;		
-	outbuf[4]=temp;
-	varOutput=outbuf;
+	outbuf.SetSize(8);					    //设置输出字节大小，构造MODBUS数据格式
+	outbuf[0] = airNo + 1;							//PC直接接外机标志
+	outbuf[1] = 0x04;                         //功能代码
+	outbuf[2] = 0x00;//0x00;							//00 c8 表示从30199开始的地址
+	outbuf[3] = 0x59;//			
+	outbuf[4] = 0x00;
+	outbuf[5] = 0x5;
+	crc = calcrc(&outbuf);
+	temp = crc & 0x00ff;
+	outbuf[6] = temp;
+	temp = crc & 0xff00;
+	temp = temp >> 8;
+	outbuf[7] = temp;
+	varOutput = outbuf;
 	m_comm1.SetInBufferCount(0);
 	m_comm1.SetOutBufferCount(0);
 	m_comm1.SetOutput(varOutput);
@@ -594,6 +608,22 @@ int CMDSDoc::getcommdata(CByteArray* inbyte)
 		return reply;
 	if(inbyte->GetAt(ncount-2)!=temp1||inbyte->GetAt(ncount-1)!=temp2)
 		reply=0;
+	else if ((inbyte->GetAt(1) == 0x04) && (inbyte->GetAt(2) == 80))//读命令12循环命令
+	{
+		reply = 1;
+	}
+	else if ((inbyte->GetAt(1) == 0x04) && (inbyte->GetAt(2) == 12))//读命令12循环命令
+	{
+		reply = 3;
+	}
+	else if ((inbyte->GetAt(1) == 0x02) && (inbyte->GetAt(2) == 2))//读命令12循环命令
+	{
+		reply = 2;
+	}
+	else if ((inbyte->GetAt(1) == 0x04) && (inbyte->GetAt(2) == 10))//读命令12循环命令
+	{
+		reply = 25;
+	}
 	else
 		reply=inbyte->GetAt(1);
 	return reply;
@@ -602,7 +632,7 @@ int CMDSDoc::getcommdata(CByteArray* inbyte)
 //响应外机配置
 int CMDSDoc::reply_out_set(CByteArray* inbyte)
 {
-	int address=inbyte->GetAt(0);
+	int address=inbyte->GetAt(0)-1;
 	if(address<0||address>31||address!=queryAirNo)
 		return 0;
 	airlist[address].reply_out_set(inbyte);
@@ -613,28 +643,17 @@ int CMDSDoc::reply_out_set(CByteArray* inbyte)
 //响应内机配置  //现在为响应从机配置
 int CMDSDoc::reply_in_set(CByteArray* inbyte)
 {
-	int address=inbyte->GetAt(0);
-	
+	int address=inbyte->GetAt(0)-1;
 	if(address<0||address>31||address!=queryAirNo)
 		return 0;
-	airlist[address].in_groupquery=inbyte->GetAt(3);
 	airlist[address].reply_in_set(inbyte);
-	if(airlist[address].in_groupquery<airlist[address].in_num-1)
-	{
-		airlist[address].in_groupquery++;
-		return 2;
-	}
-	else
-	{
-		airlist[address].in_groupquery=0;
-		return 1;
-	}
+	return 1;
 }
 
 //响应机组运行状态 //主机运行参数
 int CMDSDoc::reply_air_status(CByteArray* inbyte)
 {
-	int address=inbyte->GetAt(0);
+	int address=inbyte->GetAt(0)-1;
 	if(address<0||address>31||address!=queryAirNo)
 		return 0;
 	airlist[address].reply_air_status(inbyte);
@@ -644,7 +663,7 @@ int CMDSDoc::reply_air_status(CByteArray* inbyte)
 //响应测试模式输出状态
 int CMDSDoc::reply_test_status(CByteArray* inbyte)
 {
-	int address=inbyte->GetAt(0);
+	int address=inbyte->GetAt(0)-1;
 	if(address<0||address>31)
 		return 0;
 	airlist[address].reply_test_status(inbyte);

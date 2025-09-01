@@ -205,7 +205,7 @@ public:
 	unsigned int BLDC_speed1; //系统1风机转速
 	float hpre2; //高压2
 	float hpre1; //高压1
-
+	int CheckNegative(const BYTE bHight, const BYTE bLow);
 	void reply_slave_para(CByteArray* inbyte);
 	void DataToTemp();
 	void modify_out_para_24(CByteArray* outbyte);
@@ -653,7 +653,7 @@ public:
 	float f_s_tp14;				//
 	float f_s_highpre;				//高压
 	float f_s_lowpre;					//低压
-	float f_s_gaoya;				//高压
+	float f_s_gaoya1;				//高压
 	float f_s_gaoya2;					//gaoya2
 	float f_s_factsuperhot;
 	float f_s_factsuperhot2;

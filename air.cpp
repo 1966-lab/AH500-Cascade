@@ -333,579 +333,197 @@ air::~air()
 //响应外机配置  1号命令
 void air::reply_out_set(CByteArray* inbyte)
 {
+
+
 	BYTE temp, temp1;
 	int flag = 0;
-	int i, sum, kk;
-	//	int compnum[8]={2,2,2,3,4,4,5,6};
-	if (inbyte->GetSize() < 35)	//做一长度有效性检查
-		return;
+	int i, sum, k;
+	float nTemp;
 	sum = inbyte->GetAt(2);
-	for (i = 3; i < sum + 3; i++)
+	for (k = 3; k < sum + 3; k++)
 	{
-		//外机程序版本	
-		if (i == 3)
+		if (k == 4)
 		{
-			out_version = inbyte->GetAt(3);
-			out_version_end = inbyte->GetAt(29);
+			nTemp = CheckNegative(inbyte->GetAt(3), inbyte->GetAt(4));
+			s_tp5 = nTemp / 10.0f;
 		}
-		//机组类型  0--MDS-A 1--MDS--B	
-		if (i == 4)
+		if (k == 5)
 		{
-			temp = inbyte->GetAt(4);
-			temp1 = temp >> 7;
-			air_type1 = temp1 & 1;
-			//机组类型  0--单冷  1--热泵
-			temp1 = temp >> 6;
-			air_type2 = temp1 & 1;
-			//内机数量
-			in_num = temp & 0x0f;
-			in_group = (in_num - 1) / 16;
+			nTemp = CheckNegative(inbyte->GetAt(5), inbyte->GetAt(6));
+			s_tp6 = nTemp / 10.0f;
 		}
-		//阀的初始开度
-		if (i == 6)
+		if (k == 8)
 		{
-			temp = inbyte->GetAt(6);
-			temp1 = temp >> 5;
-			temp1 = temp1 & 0x3;
-			switch (temp1)
-			{
-			case 0:
-				air_valve_ini = 80;
-				break;
-			case 1:
-				air_valve_ini = 120;
-				break;
-			case 2:
-				air_valve_ini = 150;
-				break;
-			case 3:
-				air_valve_ini = 200;
-				break;
-			default:
-				air_valve_ini = 120;
-				break;
-			}
-
-			//外机能力
-			temp = inbyte->GetAt(6);
-			air_hp = temp & 0x0f;
-			low_type = temp & 0x10;
+			nTemp = CheckNegative(inbyte->GetAt(7), inbyte->GetAt(8));
+			s_tp7 = nTemp / 10.0f;
 		}
-
-		//除霜检测线A点(-15~-2℃),带符号表示
-		if (i == 7)
+		if (k == 10)
 		{
-			temp = inbyte->GetAt(7);
-			if (temp & 0x80)
-				s_delfrost_check_start_tp = temp - 256;
-			else
-				s_delfrost_check_start_tp = temp;
+			nTemp = CheckNegative(inbyte->GetAt(9), inbyte->GetAt(10));
+			s_tp1 = nTemp / 10.0f;
 		}
-		//除霜检测线B点  范围-30~-15℃度 默认-24℃ 带符号表示
-		if (i == 8)
+		if (k == 12)
 		{
-			temp = inbyte->GetAt(8);
-			if (temp & 0x80)
-				s_delfrost_set_tp = temp - 256;
-			else
-				s_delfrost_set_tp = temp;
+			nTemp = CheckNegative(inbyte->GetAt(11), inbyte->GetAt(12));
+			s_tp2 = nTemp / 10.0f;
 		}
-		//除霜结束温度  (5~20℃	默认12℃)
-		if (i == 9)
+		if (k == 14)
 		{
-			temp = inbyte->GetAt(9);
-			s_delfrost_exit_tp = temp;
+			nTemp = CheckNegative(inbyte->GetAt(13), inbyte->GetAt(14));
+			f_s_tp1 = nTemp / 10.0f;
 		}
-		//除霜间隔时间  (25~90min,  默认45min)
-		if (i == 10)
+		if (k == 16)
 		{
-			temp = inbyte->GetAt(10);
-			s_delfrost_intertime = temp;
+			nTemp = CheckNegative(inbyte->GetAt(15), inbyte->GetAt(16));
+			f_s_tp2 = nTemp / 10.0f;
 		}
-		//除霜运行时间  (5~15min,  默认10min)
-		if (i == 11)
+		if (k == 18)
 		{
-			temp = inbyte->GetAt(11);
-			s_delfrost_runtime = temp;
+			nTemp = CheckNegative(inbyte->GetAt(17), inbyte->GetAt(18));
+			s_tp8 = nTemp / 10.0f;
 		}
-		//降噪延迟时间(3~9,默认6)	
-		if (i == 12)
+		if (k == 20)
 		{
-			temp = inbyte->GetAt(12);
-			s_delnoise_delaytime = temp;
+			nTemp = CheckNegative(inbyte->GetAt(19), inbyte->GetAt(20));
+			s_tp3 = nTemp / 10.0f;
 		}
-
-		//动作系数1
-		if (i == 13)
+		if (k == 22)
 		{
-			temp = inbyte->GetAt(13);
-			s_movefac1 = temp;
+			nTemp = CheckNegative(inbyte->GetAt(21), inbyte->GetAt(22));
+			s_tp4 = nTemp / 10.0f;
 		}
-		//动作系数2
-		if (i == 14)
+		if (k == 24)
 		{
-			temp = inbyte->GetAt(14);
-			s_movefac2 = temp;
+			nTemp = CheckNegative(inbyte->GetAt(23), inbyte->GetAt(24));
+			s_tp9 = nTemp / 10.0f;
 		}
-		if (i == 15)
+		if (k == 26)
 		{
-			temp = inbyte->GetAt(15);		//TscA1
-			s_p1 = temp;
+			nTemp = CheckNegative(inbyte->GetAt(25), inbyte->GetAt(26));
+			s_tp10 = nTemp / 10.0f;
 		}
-		if (i == 16)
+		if (k == 28)
 		{
-			temp = inbyte->GetAt(16);		//TscA2
-			s_p2 = temp;
+			nTemp = CheckNegative(inbyte->GetAt(27), inbyte->GetAt(28));
+			f_s_tp9 = nTemp / 10.0f;
 		}
-		if (i == 17)
+		if (k == 30)
 		{
-			temp = inbyte->GetAt(17);		//TscT1
-			s_p3 = temp;
+			nTemp = CheckNegative(inbyte->GetAt(29), inbyte->GetAt(30));
+			f_s_tp10 = nTemp / 10.0f;
 		}
-		if (i == 18)
+		if (k == 32)
 		{
-			temp = inbyte->GetAt(18);		//TscT2
-			s_p4 = temp;
+			nTemp = CheckNegative(inbyte->GetAt(31), inbyte->GetAt(32));
+			s_lowpre = nTemp / 10.0f;
 		}
-		if (i == 19)
+		if (k == 34)
 		{
-			temp = inbyte->GetAt(19);		//TscT3
-			s_p5 = temp;
+			nTemp = CheckNegative(inbyte->GetAt(33), inbyte->GetAt(34));
+			s_highpre = nTemp / 10.0f;
 		}
-		if (i == 20)
+		if (k == 36)
 		{
-			temp = inbyte->GetAt(20);		//连管参数1
-			s_p6 = temp;
+			nTemp = CheckNegative(inbyte->GetAt(35), inbyte->GetAt(36));
+			s_gaoya1 = nTemp / 10.0f;
 		}
-		if (i == 21)
+		if (k == 38)
 		{
-			temp = inbyte->GetAt(21);		//连管参数2
-			s_p7 = temp;
+			nTemp = CheckNegative(inbyte->GetAt(37), inbyte->GetAt(38));
+			s_gaoya2 = nTemp / 10.0f;
 		}
-		if (i == 22)
+		if (k == 40)
 		{
-			temp = inbyte->GetAt(22);		//连管参数3
-			s_p8 = temp;
+			nTemp = CheckNegative(inbyte->GetAt(39), inbyte->GetAt(40));
+			f_s_lowpre = nTemp / 10.0f;
 		}
-		if (i == 23)
+		if (k == 42)
 		{
-			temp = inbyte->GetAt(23);		//目标过热度
-			//	s_p9=temp;
-			s_targetsuperhot = temp; //20200303
+			nTemp = CheckNegative(inbyte->GetAt(41), inbyte->GetAt(42));
+			f_s_highpre = nTemp / 10.0f;
 		}
-		if (i == 24)
+		if (k == 44)
 		{
-			temp = inbyte->GetAt(24);		//制冷防冻温度
-			if (temp & 0x80)
-				s_antifreeze = temp - 256;
-			else
-				s_antifreeze = temp;
+			nTemp = CheckNegative(inbyte->GetAt(43), inbyte->GetAt(44));
+			f_s_gaoya1 = nTemp / 10.0f;
 		}
-		if (i == 25)
+		if (k == 46)
 		{
-			temp = inbyte->GetAt(25);		//冬季防冻温度
-			if (temp & 0x80)
-				s_winterantif = temp - 256;
-			else
-				s_winterantif = temp;
+			nTemp = CheckNegative(inbyte->GetAt(45), inbyte->GetAt(46));
+			f_s_gaoya2 = nTemp / 10.0f;
 		}
-		if (i == 30)
+		if (k == 48)
 		{
-			cool_media_type = inbyte->GetAt(30);
+			nTemp = CheckNegative(inbyte->GetAt(47), inbyte->GetAt(48));
+			s_tp11 = nTemp / 10.0f; // 补气进口温度1-1
 		}
-		if (i == 32)
+		if (k == 50)
 		{
-			slave_ini = inbyte->GetAt(32); //外机查询从机初始化完成标记
+			nTemp = CheckNegative(inbyte->GetAt(49), inbyte->GetAt(50));
+			s_tp12 = nTemp / 10.0f; // 补气进口温度2-1
 		}
-		if (i == 54)
+		if (k == 52)
 		{
-			s_comp1_real = inbyte->GetAt(54); //外机查询从机初始化完成标记
+			nTemp = CheckNegative(inbyte->GetAt(51), inbyte->GetAt(52));
+			s_tp13 = nTemp / 10.0f; // 补气出口温度1-1
 		}
-		if (i == 55)
+		if (k == 54)
 		{
-			s_comp2_real = inbyte->GetAt(55); //外机查询从机初始化完成标记
+			nTemp = CheckNegative(inbyte->GetAt(53), inbyte->GetAt(54));
+			s_tp14 = nTemp / 10.0f; // 补气出口温度2-1
 		}
-		if (i == 92)
+		if (k == 56)
 		{
-			s_fan3_real = inbyte->GetAt(92); //外机查询从机初始化完成标记
+			nTemp = CheckNegative(inbyte->GetAt(55), inbyte->GetAt(56));
+			s_ele_distension_valve1 = nTemp / 10.0f; // 主路膨胀阀1-1
 		}
-		if (i == 94)
+		if (k == 58)
 		{
-			s_fan4_real = inbyte->GetAt(94); //外机查询从机初始化完成标记
+			nTemp = CheckNegative(inbyte->GetAt(57), inbyte->GetAt(58));
+			s_ele_distension_valve2 = nTemp / 10.0f; // 主路膨胀阀2-1
 		}
-		if (i == 113)
+		if (k == 60)
 		{
-			s_comp3_real = inbyte->GetAt(113); //外机查询从机初始化完成标记
+			nTemp = CheckNegative(inbyte->GetAt(59), inbyte->GetAt(60));
+			f_s_ele_distension_valve1 = nTemp / 10.0f; // 主路膨胀阀1-2
 		}
-		if (i == 114)
+		if (k == 62)
 		{
-			s_comp4_real = inbyte->GetAt(114); //外机查询从机初始化完成标记
+			nTemp = CheckNegative(inbyte->GetAt(61), inbyte->GetAt(62));
+			f_s_ele_distension_valve2 = nTemp / 10.0f; // 主路膨胀阀2-2
 		}
-		//	if(i==37)
-		//	{
-		//		kk=inbyte->GetAt(37);
-		//		out_version+=(kk*256);
-		//	}
-		//if (i == 50)
-		//{
-		//	qd1_setfre = inbyte->GetAt(50);
-		//}
-		//if (i == 51)
-		//{
-		//	qd2_setfre = inbyte->GetAt(51);
-		//}
-		//if (i == 52)
-		//{
-		//	qd3_setfre = inbyte->GetAt(52);
-		//}
-		//if (i == 53)
-		//{
-		//	qd4_setfre = inbyte->GetAt(53);
-		//}
-		//if (i == 54)
-		//{
-		//	qd1_actfre = inbyte->GetAt(54);
-		//}
-		//if (i == 55)
-		//{
-		//	qd2_actfre = inbyte->GetAt(55);
-		//}
-		//if (i == 56)
-		//{
-		//	qd3_actfre = inbyte->GetAt(56);
-		//}
-		//if (i == 57)
-		//{
-		//	qd4_actfre = inbyte->GetAt(57);
-		//}
-		//if (i == 58)
-		//{
-		//	qd1_fcode = inbyte->GetAt(58);
-		//}
-		//if (i == 59)
-		//{
-		//	qd2_fcode = inbyte->GetAt(59);
-		//}
-		//if (i == 60)
-		//{
-		//	qd3_fcode = inbyte->GetAt(60);
-		//}
-		//if (i == 61)
-		//{
-		//	qd4_fcode = inbyte->GetAt(61);
-
-		//}
-		//if (i == 96)
-		//{
-		//	ad1_modetemp = inbyte->GetAt(96);
-		//}
-		//if (i == 97)
-		//{
-		//	ad2_modetemp = inbyte->GetAt(97);
-		//}
-		//if (i == 98)
-		//{
-		//	ad3_modetemp = inbyte->GetAt(98);
-		//}
-		//if (i == 99)
-		//{
-		//	ad4_modetemp = inbyte->GetAt(99);
-		//}
-		////外机程序版本	
-		//if (i == 63)
-		//{
-		//	f_out_version = inbyte->GetAt(63);
-		//}
-		////机组类型  0--MDS-A 1--MDS--B	
-		//if (i == 64)
-		//{
-		//	temp = inbyte->GetAt(64);
-		//	temp1 = temp >> 7;
-		//	f_air_type1 = temp1 & 1;
-		//	//机组类型  0--单冷  1--热泵
-		//	temp1 = temp >> 6;
-		//	f_air_type2 = temp1 & 1;
-		//	//内机数量
-		//	f_in_num = temp & 0x0f;
-		//	f_in_group = (in_num - 1) / 16;
-		//}
-		////阀的初始开度
-		//if (i == 66)
-		//{
-		//	temp = inbyte->GetAt(66);
-		//	temp1 = temp >> 5;
-		//	temp1 = temp1 & 0x3;
-		//	switch (temp1)
-		//	{
-		//	case 0:
-		//		f_air_valve_ini = 80;
-		//		break;
-		//	case 1:
-		//		f_air_valve_ini = 120;
-		//		break;
-		//	case 2:
-		//		f_air_valve_ini = 150;
-		//		break;
-		//	case 3:
-		//		f_air_valve_ini = 200;
-		//		break;
-		//	default:
-		//		f_air_valve_ini = 120;
-		//		break;
-		//	}
-
-		//	//外机能力
-		//	temp = inbyte->GetAt(66);
-		//	f_air_hp = temp & 0x0f;
-		//	f_low_type = temp & 0x10;
-		//}
-
-		////除霜检测线A点(-15~-2℃),带符号表示
-		//if (i == 67)
-		//{
-		//	temp = inbyte->GetAt(67);
-		//	if (temp & 0x80)
-		//		f_s_delfrost_check_start_tp = temp - 256;
-		//	else
-		//		f_s_delfrost_check_start_tp = temp;
-		//}
-		////除霜检测线B点  范围-30~-15℃度 默认-24℃ 带符号表示
-		//if (i == 68)
-		//{
-		//	temp = inbyte->GetAt(68);
-		//	if (temp & 0x80)
-		//		f_s_delfrost_set_tp = temp - 256;
-		//	else
-		//		f_s_delfrost_set_tp = temp;
-		//}
-		////除霜结束温度  (5~20℃	默认12℃)
-		//if (i == 69)
-		//{
-		//	temp = inbyte->GetAt(69);
-		//	f_s_delfrost_exit_tp = temp;
-		//}
-		////除霜间隔时间  (25~90min,  默认45min)
-		//if (i == 70)
-		//{
-		//	temp = inbyte->GetAt(70);
-		//	f_s_delfrost_intertime = temp;
-		//}
-		////除霜运行时间  (5~15min,  默认10min)
-		//if (i == 71)
-		//{
-		//	temp = inbyte->GetAt(71);
-		//	f_s_delfrost_runtime = temp;
-		//}
-
-		//if (i == 72)
-		//{
-		//	temp = inbyte->GetAt(72);
-		//	f_s_p6 = temp;
-		//}
-
-
-		//if (i == 73)
-		//{
-		//	temp = inbyte->GetAt(73);
-		//	f_s_p7 = temp;
-		//}
-
-		//if (i == 74)
-		//{
-		//	temp = inbyte->GetAt(74);
-		//	f_s_p8 = temp;
-		//}
-		//if (i == 75)
-		//{
-		//	temp = inbyte->GetAt(75);		//TscA1
-		//	f_s_targetsuperhot_change = temp;
-		//}
-		//if (i == 76)
-		//{
-		//	temp = inbyte->GetAt(76);		//制冷防冻温度
-		//	if (temp & 0x80)
-		//		f_s_antifreeze = temp - 256;
-		//	else
-		//		f_s_antifreeze = temp;
-		//}
-		//if (i == 77)
-		//{
-		//	temp = inbyte->GetAt(77);		//冬季防冻温度
-		//	if (temp & 0x80)
-		//		f_s_winterantif = temp - 256;
-		//	else
-		//		f_s_winterantif = temp;
-		//}
-		//if (i == 78)
-		//{
-		//	f_cool_media_type = inbyte->GetAt(78);
-		//}
-
+		if (k == 64)
+		{
+			nTemp = CheckNegative(inbyte->GetAt(63), inbyte->GetAt(64));
+			s_ele_distension_valve3 = nTemp / 10.0f; // 辅路膨胀阀1-1
+		}
+		if (k == 66)
+		{
+			nTemp = CheckNegative(inbyte->GetAt(65), inbyte->GetAt(66));
+			s_ele_distension_valve4 = nTemp / 10.0f; // 辅路膨胀阀2-1
+		}
+		if (k == 68)
+		{
+			nTemp = CheckNegative(inbyte->GetAt(67), inbyte->GetAt(68));
+			s_ele = nTemp / 10.0f; // 压机电流1-1
+		}
+		if (k == 70)
+		{
+			nTemp = CheckNegative(inbyte->GetAt(69), inbyte->GetAt(70));
+			s_ele2 = nTemp / 10.0f; // 压机电流2-1
+		}
+		if (k == 72)
+		{
+			nTemp = CheckNegative(inbyte->GetAt(71), inbyte->GetAt(72));
+			f_s_ele1 = nTemp / 10.0f; // 压机电流1-2
+		}
+		if (k == 74)
+		{
+			nTemp = CheckNegative(inbyte->GetAt(73), inbyte->GetAt(74));
+			f_s_ele2 = nTemp / 10.0f; // 压机电流2-2
+		}
 	}
 }
-//void air::reply_out_set(CByteArray* inbyte)
-//{
-//	BYTE temp, temp1;
-//	int flag = 0;
-//	int kk;
-//	//	int compnum[8]={2,2,2,3,4,4,5,6};
-//	kk = inbyte->GetSize();
-//
-//	if (inbyte->GetSize() != 53)	//做一长度有效性检查
-//		return;
-//	//外机程序版本	
-//	out_version = inbyte->GetAt(3);
-//
-//	//机组类型  0--MDS-A 1--MDS--B	
-//	temp = inbyte->GetAt(4);
-//	temp1 = temp >> 7;
-//	s_remote_open = temp1 & 1;
-//	//机组类型  0--单冷  1--热泵
-//	temp1 = temp >> 6;
-//	air_type2 = temp1 & 1;
-//	temp1 = temp >> 5;
-//	ele_auto_open = temp1 & 1;
-//	//内机数量
-//	in_num = temp & 0x0f;
-//	in_group = (in_num - 1) / 16;
-//
-//	temp = inbyte->GetAt(5);
-//	temp1 = temp >> 6;
-//	s_liuliang = temp1 & 1;
-//	temp1 = temp >> 5;
-//	watertemp = temp1 & 1;
-//
-//	//阀的初始开度
-//	temp = inbyte->GetAt(6);
-//	temp1 = temp >> 7;
-//	putonorhot = temp1 & 1;
-//	temp1 = temp >> 5;
-//	temp1 = temp1 & 0x3;
-//	switch (temp1)
-//	{
-//	case 0:
-//		air_valve_ini = 80;
-//		break;
-//	case 1:
-//		air_valve_ini = 120;
-//		break;
-//	case 2:
-//		air_valve_ini = 150;
-//		break;
-//	case 3:
-//		air_valve_ini = 200;
-//		break;
-//	default:
-//		air_valve_ini = 120;
-//		break;
-//	}
-//	//外机能力
-//	temp = inbyte->GetAt(6);
-//	air_hp = temp & 0x07;
-//	low_type = temp & 0x10;
-//	//if(air_hp>7)
-//	//	air_hp=0;
-//   // air_hp=compnum[kk];
-//	//除霜检测线A点(-15~-2℃),带符号表示
-//	temp = inbyte->GetAt(7);
-//	if (temp & 0x80)
-//		s_delfrost_check_start_tp = temp - 256;
-//	else
-//		s_delfrost_check_start_tp = temp;
-//	//除霜检测线B点  范围-30~-15℃度 默认-24℃ 带符号表示
-//	temp = inbyte->GetAt(8);
-//	if (temp & 0x80)
-//		s_delfrost_set_tp = temp - 256;
-//	else
-//		s_delfrost_set_tp = temp;
-//	//除霜结束温度  (5~20℃	默认12℃)
-//	temp = inbyte->GetAt(9);
-//	s_delfrost_exit_tp = temp;
-//	//除霜间隔时间  (25~90min,  默认45min)
-//	temp = inbyte->GetAt(10);
-//	s_delfrost_intertime = temp;
-//	//除霜运行时间  (5~15min,  默认10min)
-//	temp = inbyte->GetAt(11);
-//	s_delfrost_runtime = temp;
-//	//降噪延迟时间(3~9,默认6)	
-//	temp = inbyte->GetAt(12);
-//	s_delnoise_delaytime = temp;
-//
-//	//目标过热度					
-////	temp=inbyte->GetAt(14);
-////	s_targetsuperhot=temp;
-//	//动作系数1
-//	temp = inbyte->GetAt(13);//制热启动退出抽空压力
-//	s_movefac1 = temp;
-//	//动作系数2
-//	temp = inbyte->GetAt(14);//热交器平衡系数
-//	s_movefac2 = temp;
-//
-//	temp = inbyte->GetAt(15);		//制热停机退出抽空压力
-//	s_p1 = temp;
-//	//	temp=inbyte->GetAt(16);		//TscA2
-//	//	s_p2=temp;
-//	temp = inbyte->GetAt(17);		//TscT1
-//	s_p3 = temp;//热水模式的启动温差20190904
-////	temp=inbyte->GetAt(18);		//TscT2
-////	s_p4=temp;
-//	temp = inbyte->GetAt(19);		//热水器出水温度
-//	s_p5 = temp;
-//	temp = inbyte->GetAt(20);		//制冷出水温度设定
-//	if (temp & 0x80)
-//		s_p6 = temp - 256;
-//	else
-//		s_p6 = temp;
-//	temp = inbyte->GetAt(21);		//制热出水温度设定
-//	s_p7 = temp;
-//	temp = inbyte->GetAt(22);		//开机前水泵运行时间
-//	s_p8 = temp;
-//	temp = inbyte->GetAt(23);		//目标过热度
-//	s_targetsuperhot = temp;
-//
-//	temp = inbyte->GetAt(24);		//制冷防冻温度
-//	if (temp & 0x80)
-//		s_antifreeze = temp - 256;
-//	else
-//		s_antifreeze = temp;
-//	temp = inbyte->GetAt(25);		//冬季防冻温度
-//	if (temp & 0x80)
-//		s_winterantif = temp - 256;
-//	else
-//		s_winterantif = temp;
-//
-//
-//	//	temp=inbyte->GetAt(26);		//温水阀控制周期20190904
-//	 //   s_wenshuifa=temp;
-//
-//	temp = inbyte->GetAt(27);		//热水水温补偿参数20190904
-//	s_out_byte22 = temp;
-//
-//	//	temp=inbyte->GetAt(28);		//辅路目标过热度20190904
-//	 //   s_fuluobjgrd=temp;
-//
-//	temp = inbyte->GetAt(28);	//机型
-//	air_type1 = temp;
-//
-//	cool_media_type = inbyte->GetAt(29);
-//	slave_ini = inbyte->GetAt(32); //外机查询从机初始化完成标记
-//
-//	temp = inbyte->GetAt(31);		//热水温差控制/模糊控制20190904
-//	s_hotwatercontrol = temp;
-//
-//	temp = inbyte->GetAt(32);		//制冷+热水运行状态选择20190904
-//	s_coolandhotrun = temp;
-//
-//	temp = inbyte->GetAt(33);		//制热+热水运行状态选择20190904
-//	s_hotandhotrun = temp;
-//
-//	temp = inbyte->GetAt(34);		//单水箱/双水箱20190904
-//	s_singledoublebox = temp;
-//
-//	temp = inbyte->GetAt(35);		//普通从机台数20190904
-//	s_putongslavenum = temp;
-//
-//}
 
 //响应从机配置  2号命令
 void air::reply_in_set(CByteArray* inbyte)
@@ -914,129 +532,19 @@ void air::reply_in_set(CByteArray* inbyte)
 	int No = 0;			//当前正记录内机号
 	BYTE temp, temp1;
 	int ntemp = 0;
-	No = inbyte->GetAt(3);
-	if (No > 15 || No < 0)	//做一有效性检查，防止溢出
+	No = inbyte->GetAt(2);
+	if (No > 2 || No < 0)	//做一有效性检查，防止溢出
 		return;
-	//外机程序版本	
-	indoor_air[No].s_out_version = inbyte->GetAt(4);
-	temp = inbyte->GetAt(5);
-	//机组类型  0--单冷  1--热泵
-	temp1 = temp >> 6;
-	indoor_air[No].s_air_type2 = temp1 & 1;
-	//阀的初始开度
-	temp = inbyte->GetAt(7);
-	temp1 = temp >> 5;
-	temp1 = temp1 & 0x3;
-	switch (temp1)
-	{
-	case 0:
-		indoor_air[No].s_air_valve_ini = 80;
-		break;
-	case 1:
-		indoor_air[No].s_air_valve_ini = 120;
-		break;
-	case 2:
-		indoor_air[No].s_air_valve_ini = 150;
-		break;
-	case 3:
-		indoor_air[No].s_air_valve_ini = 200;
-		break;
-	default:
-		indoor_air[No].s_air_valve_ini = 120;
-		break;
-	}
-	//外机能力
-	temp = inbyte->GetAt(7);
-	indoor_air[No].air_hp = temp & 0x0f;
-	indoor_air[No].low_type_s = temp & 0x10;
-	temp1 = temp >> 7;
-	temp1 = temp1 & 0x01;
-	indoor_air[No].s_putongorhot = temp1;
-	//除霜检测线A点(-15~-2℃),带符号表示
-	temp = inbyte->GetAt(8);
-	if (temp & 0x80)
-		indoor_air[No].s_delfrost_check_start_tp = temp - 256;
-	else
-		indoor_air[No].s_delfrost_check_start_tp = temp;
-	//除霜检测线B点  范围-30~-15℃度 默认-24℃ 带符号表示
-	temp = inbyte->GetAt(9);
-	if (temp & 0x80)
-		indoor_air[No].s_delfrost_set_tp = temp - 256;
-	else
-		indoor_air[No].s_delfrost_set_tp = temp;
-	//除霜结束温度  (5~20℃	默认12℃)
-	temp = inbyte->GetAt(10);
-	indoor_air[No].s_delfrost_exit_tp = temp;
-	//除霜间隔时间  (25~90min,  默认45min)
-	temp = inbyte->GetAt(11);
-	indoor_air[No].s_delfrost_intertime = temp;
-	//除霜运行时间  (5~15min,  默认10min)
-	temp = inbyte->GetAt(12);
-	indoor_air[No].s_delfrost_runtime = temp;
-	//降噪延迟时间(3~9,默认6)	
-	temp = inbyte->GetAt(13);
-	indoor_air[No].s_delnoise_delaytime = temp;
-
-	//目标过热度					
-//	temp=inbyte->GetAt(14);
-//	s_targetsuperhot=temp;
-	//动作系数1
-	temp = inbyte->GetAt(14);
-	indoor_air[No].s_movefac1 = temp;
-	//动作系数2
-	temp = inbyte->GetAt(15);
-	indoor_air[No].s_movefac2 = temp;
-
-	temp = inbyte->GetAt(16);		//TscA1
-	indoor_air[No].s_p1 = temp;
-	temp = inbyte->GetAt(17);		//TscA2
-	indoor_air[No].s_putongslavenum = temp;
-	temp = inbyte->GetAt(18);		//压缩机中压腔过热度
-	indoor_air[No].s_p3 = temp;
-	temp = inbyte->GetAt(19);		//TscT2
-	indoor_air[No].s_p4 = temp;
-	temp = inbyte->GetAt(20);		//TscT3热水器出水温度
-	indoor_air[No].s_p5 = temp;
-	temp = inbyte->GetAt(21);		//连管参数1制冷出水温度设定
-	indoor_air[No].s_p6 = temp;
-	temp = inbyte->GetAt(22);		//连管参数2制热出水温度设定
-	indoor_air[No].s_p7 = temp;
-	temp = inbyte->GetAt(23);		//连管参数3
-	indoor_air[No].s_p8 = temp;
-	temp = inbyte->GetAt(24);		//目标过热度
-	indoor_air[No].s_targetsuperhot = temp;
-	temp = inbyte->GetAt(25);//制冷防冻温度
-	if (temp & 0x80)
-		indoor_air[No].s_cool_ant = temp - 256;
-	else
-		indoor_air[No].s_cool_ant = temp;
-	temp = inbyte->GetAt(26);//冬季防冻温度
-	if (temp & 0x80)
-		indoor_air[No].s_winter_ant = temp - 256;
-	else
-		indoor_air[No].s_winter_ant = temp;
-
-	temp = inbyte->GetAt(27);//温水阀控制周期
-	indoor_air[No].s_wenshuifa = temp;
-	temp = inbyte->GetAt(28);//热水水温补偿参数
-	indoor_air[No].s_hotwaterarg = temp;
-	temp = inbyte->GetAt(30);
-	indoor_air[No].cool_media_s = temp;
-
-	temp = inbyte->GetAt(32);		//热水温差控制/模糊控制20190904
-	indoor_air[No].s_hotwatercontrol = temp;
-
-	temp = inbyte->GetAt(33);		//制冷+热水运行状态选择20190904
-	indoor_air[No].s_coolandhotrun = temp;
-
-	temp = inbyte->GetAt(34);		//制热+热水运行状态选择20190904
-	indoor_air[No].s_hotandhotrun = temp;
-
-	temp = inbyte->GetAt(35);		//单水箱/双水箱20190904
-	indoor_air[No].s_singledoublebox = temp;
-
-	//	temp=inbyte->GetAt(36);		//普通/热回收20190904
-	//   	indoor_air[No].s_putongorhot=temp;
+	ntemp =inbyte->GetAt(3);
+	DO5 = (ntemp >> 2) & 0x01;//四通阀1
+	DO6 = (ntemp >> 3) & 0x01;
+	s_ahot = (ntemp >> 4) & 0x01;//曲轴电加热1
+	hot_eheat = (ntemp >> 5) & 0x01;//曲轴电加热2
+	ntemp = inbyte->GetAt(4);
+	s_comp3_real = ntemp & 0x01;//压缩机1
+	s_comp4_real = (ntemp >> 1) & 0x01;//压缩机2
+	DOF5 = (ntemp >> 2) & 0x01;//副板电加热1
+	DOF6 = (ntemp >> 3) & 0x01;//副板电加热2
 }
 
 //查询主机运行状态、状态 3号命令 
@@ -1046,734 +554,31 @@ void air::reply_air_status(CByteArray* inbyte)
 	int k, byte_count, sum;
 	//byte(3到5)是线控器设置的温度模式等
 	//byte(6到9)是主机状态
-
 	sum = inbyte->GetAt(2);
 	for (k = 3; k < sum + 3; k++)
 	{
+		if (k == 4)
+		{
+			temp = CheckNegative(inbyte->GetAt(3), inbyte->GetAt(4));
+			s_comp1_real = temp;
+		}
 		if (k == 6)
 		{
-			temp = inbyte->GetAt(6);
-
-			//运行模式  0--停机 1--制冷 2--制热 3--自动
-			//			4--除霜 5--调试
-			s_runmode = temp & 0x7;
-			//风机1  0--停 1--低速 2--中速 3--高速
-			temp1 = temp >> 3;
-			s_windmotor1 = temp1 & 0x3;
-			//风机2  0--停 1--低速 2--中速 3--高速	
-			temp1 = temp >> 5;
-			s_windmotor2 = temp1 & 0x3;
-		}
-		if (k == 7)
-		{
-			//压缩机1状态 0--关 1--开
-			temp = inbyte->GetAt(7);
-			//四通阀1状态 0--关 1--开
-			s_fourvalve1 = temp & 0x1;
-			//四通阀2状态 0--关 1--开
-			temp1 = temp >> 1;
-			s_fourvalve2 = temp1 & 0x1;
-			temp1 = temp >> 2;
-			s_compre[0] = temp1 & 0x1;
-			//压缩机2状态 0--关 1--开
-			temp1 = temp >> 3;
-			s_compre[1] = temp1 & 0x1;
-			//压缩机3状态 0--关 1--开
-			temp1 = temp >> 4;
-			s_compre[2] = temp1 & 0x1;
-			//压缩机4状态 0--关 1--开
-			temp1 = temp >> 5;
-			s_compre[3] = temp1 & 0x1;
-			temp1 = temp >> 6;
-			//s_pumpstate3 = temp1 & 0x1;
-			temp1 = temp >> 7;
-			//m_int_revalve = temp1 & 0x1;
-		}
-		if (k == 8)
-		{
-			//水泵输出
-			temp = inbyte->GetAt(8);
-			s_pumpstate = temp & 0x1;
-			//电加热
-			temp1 = temp >> 1;
-			s_ehot = temp1 & 0x1;
-			//辅热
-			temp1 = temp >> 2;
-			s_ahot = temp1 & 0x1;
-			//电磁阀2状态
-			temp1 = temp >> 4;
-			s_ele_valve1 = temp1 & 0x1;
-		}
-		if (k == 9)
-		{
-			//数码压缩机PWM输出百分比
-			temp = inbyte->GetAt(9);
-			//s_pumpstate2 = temp & 0x1;
-			temp1 = temp >> 1;
-			//int_cool_fan = temp1 & 0x01;
-			temp1 = temp >> 2;
-			//chvalve = temp1 & 0x01;
-		}
-		if (k == 10)
-		{
-			temp = inbyte->GetAt(10);
-			temp1 = temp >> 4;
-			s_ele_valve0 = temp1 & 0x1;
-			temp1 = temp >> 5;
-			s_fourvalve4 = temp1 & 0x1;
-		}
-		if (k == 11)
-		{
-			//电磁膨胀阀1开度
-			temp = inbyte->GetAt(11);
-			s_ele_distension_valve1 = temp * 2;
+			temp = CheckNegative(inbyte->GetAt(5), inbyte->GetAt(6));
+			s_comp2_real = temp;
 		}
 		if (k == 12)
 		{
-			//电磁膨胀阀2开度
-			temp = inbyte->GetAt(12);
-			s_ele_distension_valve2 = temp * 2;
-		}
-		if (k == 13)
-		{
-			//电磁膨胀阀3开度
-			temp = inbyte->GetAt(13);
-			s_ele_distension_valve3 = temp * 2;
+			temp = CheckNegative(inbyte->GetAt(11), inbyte->GetAt(12));
+			s_fan1_real = temp;
 		}
 		if (k == 14)
 		{
-			//电磁膨胀阀4开度
-			temp = inbyte->GetAt(14);
-			s_ele_distension_valve4 = temp * 2;
-		}
-		if (k == 15)
-		{
-			//排气温度
-			temp = inbyte->GetAt(15);
-			temp1 = inbyte->GetAt(29);
-			s_tp1 = caldec_dlt(temp, temp1, 0);
-		}
-		if (k == 16)
-		{
-			//环境温度
-			temp = inbyte->GetAt(16);
-			temp1 = inbyte->GetAt(30);
-			s_tp2 = caldec_dlt(temp, temp1, 1);
-		}
-		if (k == 17)
-		{
-			//回气温度	
-			temp = inbyte->GetAt(17);
-			temp1 = inbyte->GetAt(30);
-			s_tp3 = caldec(temp, temp1, 0);
-		}
-		if (k == 18)
-		{
-			//1#进盘温度
-			temp = inbyte->GetAt(18);
-			temp1 = inbyte->GetAt(31);
-			s_tp4 = caldec(temp, temp1, 1);
-		}
-		if (k == 19)
-		{
-			//1#中盘温度
-			temp = inbyte->GetAt(19);
-			temp1 = inbyte->GetAt(31);
-			s_tp5 = caldec(temp, temp1, 0);
-		}
-		if (k == 20)
-		{
-			//1#出盘温度
-			temp = inbyte->GetAt(20);
-			temp1 = inbyte->GetAt(32);
-			s_tp6 = caldec(temp, temp1, 1);
-		}
-		if (k == 21)
-		{
-			//2#进盘温度
-			temp = inbyte->GetAt(21);
-			temp1 = inbyte->GetAt(32);
-			s_tp7 = caldec(temp, temp1, 0);
-		}
-		if (k == 22)
-		{
-			//2#中盘温度
-			temp = inbyte->GetAt(22);
-			temp1 = inbyte->GetAt(33);
-			s_tp8 = caldec(temp, temp1, 1);
-		}
-		if (k == 23)
-		{
-			//2#出盘温度
-			temp = inbyte->GetAt(23);
-			temp1 = inbyte->GetAt(33);
-			s_tp9 = caldec(temp, temp1, 0);
-		}
-		if (k == 24)
-		{
-			//3#进盘温度
-			temp = inbyte->GetAt(24);
-			temp1 = inbyte->GetAt(34);
-			s_tp10 = caldec(temp, temp1, 1);
-		}
-		if (k == 25)
-		{
-			//3#中盘温度
-			temp = inbyte->GetAt(25);
-			temp1 = inbyte->GetAt(34);
-			s_tp11 = caldec(temp, temp1, 0);
-		}
-		if (k == 26)
-		{
-			//3#出盘温度
-			temp = inbyte->GetAt(26);
-			temp1 = inbyte->GetAt(35);
-			s_tp12 = caldec(temp, temp1, 1);
-		}
-		if (k == 27)
-		{
-			//系统2低压        ?????????
-			temp = inbyte->GetAt(27);
-			temp1 = inbyte->GetAt(36);
-			temp1 = temp1 >> 4;
-			temp1 = temp1 & 0x0F;
-			s_highpre = temp + (float)temp1 / 10;
-		}
-		if (k == 28)
-		{
-			//系统1低压
-			temp = inbyte->GetAt(28);
-			temp1 = inbyte->GetAt(36);
-			temp1 = temp1 & 0x0F;
-			s_lowpre = temp + (float)temp1 / 10;
-		}
-		if (k == 29)
-		{
-			//实际过热度					
-			temp = inbyte->GetAt(37);
-			temp1 = inbyte->GetAt(35);
-			s_factsuperhot = caldec(temp, temp1, 0);
-			//实际过热度2
-			temp = inbyte->GetAt(38);
-			temp1 = inbyte->GetAt(29);
-			s_factsuperhot2 = caldec(temp, temp1, 1);
-			//目标过热度					
-			temp = inbyte->GetAt(39);
-			s_targetsuperhot = temp;
-
-			temp = inbyte->GetAt(40);
-			s_total_needed_HP = temp;
-		}
-		if (k == 112)
-		{
-			//实际过热度3					
-			temp = inbyte->GetAt(120);
-			temp1 = inbyte->GetAt(118);
-			s_factsuperhot3 = caldec(temp, temp1, 0);
-			//实际过热度4
-			temp = inbyte->GetAt(121);
-			temp1 = inbyte->GetAt(112);
-			s_factsuperhot4 = caldec(temp, temp1, 1);
-		}
-		if (k == 41)
-		{
-			//从机通讯故障
-			for (int i = 0; i < 2; i++)
-			{
-				temp = inbyte->GetAt(41 + i);
-				for (int j = 0; j < 8; j++)
-				{
-					temp1 = temp >> j;
-					com_error[i * 8 + j] = temp1 & 1;
-				}
-			}
-			temp = inbyte->GetAt(43);
-			for (int j = 0; j < 8; j++)
-			{
-				temp1 = temp >> j;
-				s_error[j] = temp1 & 1;
-			}
-			temp = inbyte->GetAt(44);
-			for (int j = 0; j < 8; j++)
-			{
-				temp1 = temp >> j;
-				s_error[8 + j] = temp1 & 1;
-			}
-			temp = inbyte->GetAt(45);
-			for (int j = 0; j < 8; j++)
-			{
-				temp1 = temp >> j;
-				s_error[16 + j] = temp1 & 1;
-			}
-
-			temp = inbyte->GetAt(46);
-			for (int j = 0; j < 8; j++)
-			{
-				temp1 = temp >> j;
-				s_error[24 + j] = temp1 & 1;
-			}
-			temp = inbyte->GetAt(47);
-			for (int j = 0; j < 8; j++)
-			{
-				temp1 = temp >> j;
-				s_error[32 + j] = temp1 & 1;
-			}
-
-			temp = inbyte->GetAt(48);
-			for (int j = 0; j < 8; j++)
-			{
-				temp1 = temp >> j;
-				s_error[40 + j] = temp1 & 1;
-			}
-
-			temp = inbyte->GetAt(49);
-			for (int j = 0; j < 8; j++)
-			{
-				temp1 = temp >> j;
-				s_error[48 + j] = temp1 & 1;
-			}
-		}
-		if (k == 50)
-		{
-			//电流1
-			temp = inbyte->GetAt(50);
-			temp1 = inbyte->GetAt(51);
-			//s_ele = caldec_dlt(temp, temp1, 0);
-			s_ele =temp+(float)temp1/10;
-		}
-		if (k == 52)
-		{
-			//电流2
-			temp = inbyte->GetAt(52);
-			temp1 = inbyte->GetAt(53);
-			//s_ele2 = caldec_dlt(temp, temp1, 0);
-			s_ele2 = temp + (float)temp1 / 10;
-		}
-		if (k == 54)
-		{
-			//电流3
-			temp = inbyte->GetAt(54);
-			temp1 = inbyte->GetAt(55);
-			s_ele3 = caldec_dlt(temp, temp1, 0);
-		}
-		if (k == 56)
-		{
-			temp = inbyte->GetAt(56);
-			if (temp == 0)
-			{
-				;
-			}
-			else
-			{
-				temp1 = inbyte->GetAt(61);
-				s_tp13 = caldec_dlt(temp, temp1, 0);
-			}
-		}
-		if (k == 57)
-		{
-			temp = inbyte->GetAt(57);
-			if (temp == 0)
-			{
-				;
-			}
-			else
-			{
-				temp1 = inbyte->GetAt(61);
-				s_tp14 = caldec_dlt(temp, temp1, 1);
-			}
-		}
-		if (k == 64)
-		{
-			//电流4
-			temp = inbyte->GetAt(64);
-			temp1 = inbyte->GetAt(65);
-			//s_ele4 = caldec_dlt(temp, temp1, 0);
-		}
-		if (k == 72)
-		{
-			temp = inbyte->GetAt(72);
-
-			temp1 = temp >> 3;
-			//sr_windmotor1 = temp1 & 0x3;
-			//风机2  0--停 1--低速 2--中速 3--高速	
-			temp1 = temp >> 5;
-			//sr_windmotor2 = temp1 & 0x3;
-		}
-
-		if (k == 75)
-		{
-			//高压1整数部分
-			temp = inbyte->GetAt(75);
-			temp1 = inbyte->GetAt(77);
-			s_gaoya1 = caldec_dlt(temp, temp1, 0);
-		}
-		if (k == 76)
-		{
-			//高压2整数部分
-			temp = inbyte->GetAt(76);
-			temp1 = inbyte->GetAt(77);
-			s_gaoya2 = caldec_dlt(temp, temp1, 1);
-		}
-		if (k == 78)
-		{
-			//风机1设置转速
-			temp = inbyte->GetAt(78);
-			temp1 = inbyte->GetAt(79);
-			temp = temp << 8;
-		//	s_fan1_set = temp + temp1;
-		}
-		if (k == 80)
-		{
-			//风机2设置转速
-			temp = inbyte->GetAt(80);
-			temp1 = inbyte->GetAt(81);
-			temp = temp << 8;
-		//	s_fan2_set = temp + temp1;
-		}
-		if (k == 82)
-		{
-			//风机1实际转速
-			//temp = inbyte->GetAt(82);
-			temp1 = inbyte->GetAt(83);
-			///temp = temp << 8;
-			s_fan1_real =  temp1;
-		}
-		if (k == 84)
-		{
-			//风机2实际转速
-			//temp = inbyte->GetAt(84);
-			temp1 = inbyte->GetAt(85);
-			//temp = temp << 8;
-			s_fan2_real = temp1;
-		}
-//以下副板
-		if (k == 89)
-		{
-			temp = inbyte->GetAt(89);
-
-			//运行模式  0--停机 1--制冷 2--制热 3--自动
-			//			4--除霜 5--调试
-		//	f_s_runmode = temp & 0x7;
-			//风机1  0--停 1--低速 2--中速 3--高速
-			temp1 = temp >> 3;
-		//	f_s_windmotor1 = temp1 & 0x3;
-			//风机2  0--停 1--低速 2--中速 3--高速	
-			temp1 = temp >> 5;
-		//	f_s_windmotor2 = temp1 & 0x3;
-		}
-		if (k == 90)
-		{
-			//压缩机1状态 0--关 1--开
-			temp = inbyte->GetAt(90);
-			//四通阀1状态 0--关 1--开
-			f_s_fourvalve1 = temp & 0x1;
-			//四通阀2状态 0--关 1--开
-			temp1 = temp >> 1;
-			f_s_fourvalve2 = temp1 & 0x1;
-			temp1 = temp >> 2;
-			f_s_compre[0] = temp1 & 0x1;
-			//压缩机2状态 0--关 1--开
-			temp1 = temp >> 3;
-			f_s_compre[1] = temp1 & 0x1;
-			//压缩机3状态 0--关 1--开
-			temp1 = temp >> 4;
-			f_s_compre[2] = temp1 & 0x1;
-			//压缩机4状态 0--关 1--开
-			temp1 = temp >> 5;
-			f_s_compre[3] = temp1 & 0x1;
-			temp1 = temp >> 6;
-			f_s_pumpstate3 = temp1 & 0x1;
-			temp1 = temp >> 7;
-			//f_m_int_revalve = temp1 & 0x1;
-		}
-		if (k == 91)
-		{
-			//水泵输出
-			temp = inbyte->GetAt(91);
-			f_s_pumpstate = temp & 0x1;
-			//电加热
-			temp1 = temp >> 1;
-			f_s_ehot = temp1 & 0x1;
-			//辅热
-			temp1 = temp >> 2;
-			f_s_ahot = temp1 & 0x1;
-			//电磁阀2状态
-			temp1 = temp >> 4;
-			f_s_ele_valve1 = temp1 & 0x1;
-		}
-		if (k == 92)
-		{
-			//数码压缩机PWM输出百分比
-			temp = inbyte->GetAt(92);
-			f_s_pumpstate2 = temp & 0x1;
-			temp1 = temp >> 1;
-			f_int_cool_fan = temp1 & 0x01;
-			temp1 = temp >> 2;
-			f_chvalve = temp1 & 0x01;
-		}
-		if (k == 93)
-		{
-			temp = inbyte->GetAt(93);
-			temp1 = temp >> 4;
-			f_s_ele_valve0 = temp1 & 0x1;
-			temp1 = temp >> 5;
-			f_s_fourvalve4 = temp1 & 0x1;
-		}
-		if (k == 94)
-		{
-			//电磁膨胀阀1开度
-			temp = inbyte->GetAt(94);
-			f_s_ele_distension_valve1 = temp * 2;
-		}
-		if (k == 95)
-		{
-			//电磁膨胀阀2开度
-			temp = inbyte->GetAt(95);
-			f_s_ele_distension_valve2 = temp * 2;
-		}
-		if (k == 96)
-		{
-			//电磁膨胀阀3开度
-			temp = inbyte->GetAt(96);
-			f_s_ele_distension_valve3 = temp * 2;
-		}
-		if (k == 97)
-		{
-			//电磁膨胀阀4开度
-			temp = inbyte->GetAt(97);
-			f_s_ele_distension_valve4 = temp * 2;
-		}
-		if (k == 98)
-		{
-			//排气温度
-			temp = inbyte->GetAt(98);
-			temp1 = inbyte->GetAt(112);
-			f_s_tp1 = caldec_dlt(temp, temp1, 0);
-		}
-		if (k == 99)
-		{
-			//环境温度
-			temp = inbyte->GetAt(99);
-			temp1 = inbyte->GetAt(113);
-			f_s_tp2 = caldec_dlt(temp, temp1, 1);
-		}
-		if (k == 100)
-		{
-			//回气温度	
-			temp = inbyte->GetAt(100);
-			temp1 = inbyte->GetAt(113);
-			f_s_tp3 = caldec(temp, temp1, 0);
-		}
-		if (k == 101)
-		{
-			//1#进盘温度
-			temp = inbyte->GetAt(101);
-			temp1 = inbyte->GetAt(114);
-			f_s_tp4 = caldec(temp, temp1, 1);
-		}
-		if (k == 102)
-		{
-			//1#中盘温度
-			temp = inbyte->GetAt(102);
-			temp1 = inbyte->GetAt(114);
-			f_s_tp5 = caldec(temp, temp1, 0);
-		}
-		if (k == 103)
-		{
-			//1#出盘温度
-			temp = inbyte->GetAt(103);
-			temp1 = inbyte->GetAt(115);
-			f_s_tp6 = caldec(temp, temp1, 1);
-		}
-		if (k == 104)
-		{
-			//2#进盘温度
-			temp = inbyte->GetAt(104);
-			temp1 = inbyte->GetAt(115);
-			f_s_tp7 = caldec(temp, temp1, 0);
-		}
-		if (k == 105)
-		{
-			//2#中盘温度
-			temp = inbyte->GetAt(105);
-			temp1 = inbyte->GetAt(116);
-			f_s_tp8 = caldec(temp, temp1, 1);
-		}
-		if (k == 106)
-		{
-			//2#出盘温度
-			temp = inbyte->GetAt(106);
-			temp1 = inbyte->GetAt(116);
-			f_s_tp9 = caldec(temp, temp1, 0);
-		}
-		if (k == 107)
-		{
-			//3#进盘温度
-			temp = inbyte->GetAt(107);
-			temp1 = inbyte->GetAt(117);
-			f_s_tp10 = caldec(temp, temp1, 1);
-		}
-		if (k == 108)
-		{
-			//3#中盘温度
-			temp = inbyte->GetAt(108);
-			temp1 = inbyte->GetAt(117);
-			f_s_tp11 = caldec(temp, temp1, 0);
-		}
-		if (k == 109)
-		{
-			//3#出盘温度
-			temp = inbyte->GetAt(109);
-			temp1 = inbyte->GetAt(118);
-			f_s_tp12 = caldec(temp, temp1, 1);
-		}
-		if (k == 110)
-		{
-			temp = inbyte->GetAt(110);
-			temp1 = inbyte->GetAt(119);
-			temp1 = temp1 >> 4;
-			temp1 = temp1 & 0x0F;
-			f_s_highpre = temp + (float)temp1 / 10;
-		}
-		if (k == 111)
-		{
-			//系统1低压
-			temp = inbyte->GetAt(111);
-			temp1 = inbyte->GetAt(119);
-			temp1 = temp1 & 0x0F;
-			f_s_lowpre = temp + (float)temp1 / 10;
-		}
-		if (k == 112)
-		{
-			//实际过热度					
-			temp = inbyte->GetAt(120);
-			temp1 = inbyte->GetAt(118);
-			f_s_factsuperhot = caldec(temp, temp1, 0);
-			//实际过热度2
-			temp = inbyte->GetAt(121);
-			temp1 = inbyte->GetAt(112);
-			f_s_factsuperhot2 = caldec(temp, temp1, 1);
-			//目标过热度					
-			temp = inbyte->GetAt(122);
-			f_s_targetsuperhot = temp;
-
-			temp = inbyte->GetAt(123);
-			f_s_total_needed_HP = temp;
-		}
-		if (k == 126)
-		{
-			temp = inbyte->GetAt(126);
-			for (int j = 0; j < 8; j++)
-			{
-				temp1 = temp >> j;
-				f_s_error[j] = temp1 & 1;
-			}
-		}
-		if (k == 127)
-		{
-			temp = inbyte->GetAt(127);
-			for (int j = 0; j < 8; j++)
-			{
-				temp1 = temp >> j;
-				f_s_error[8 + j] = temp1 & 1;
-			}
-		}
-		if (k == 128)
-		{
-			temp = inbyte->GetAt(128);
-			for (int j = 0; j < 8; j++)
-			{
-				temp1 = temp >> j;
-				f_s_error[16 + j] = temp1 & 1;
-			}
-		}
-		if (k == 129)
-		{
-			temp = inbyte->GetAt(129);
-			for (int j = 0; j < 8; j++)
-			{
-				temp1 = temp >> j;
-				f_s_error[24 + j] = temp1 & 1;
-			}
-		}
-		if (k == 130)
-		{
-			temp = inbyte->GetAt(130);
-			for (int j = 0; j < 8; j++)
-			{
-				temp1 = temp >> j;
-				f_s_error[32 + j] = temp1 & 1;
-			}
-		}
-		if (k == 131)
-		{
-			temp = inbyte->GetAt(131);
-			for (int j = 0; j < 8; j++)
-			{
-				temp1 = temp >> j;
-				f_s_error[40 + j] = temp1 & 1;
-			}
-		}
-		if (k == 132)
-		{
-			temp = inbyte->GetAt(132);
-			for (int j = 0; j < 8; j++)
-			{
-				temp1 = temp >> j;
-				f_s_error[48 + j] = temp1 & 1;
-			}
-		}
-		if (k == 133)
-		{
-			//电流1
-			temp = inbyte->GetAt(133);
-			temp1 = inbyte->GetAt(134);
-			f_s_ele1 = caldec_dlt(temp, temp1, 0);
-		}
-		if (k == 135)
-		{
-			//电流2
-			temp = inbyte->GetAt(135);
-			temp1 = inbyte->GetAt(136);
-			f_s_ele2 = caldec_dlt(temp, temp1, 0);
-		}
-		if (k == 137)
-		{
-			temp = inbyte->GetAt(137);
-			temp1 = temp >> 3;
-			f_sr_windmotor1 = temp1 & 0x3;
-			//风机2  0--停 1--低速 2--中速 3--高速	
-			temp1 = temp >> 5;
-			f_sr_windmotor2 = temp1 & 0x3;
-		}
-
-		if (k == 138)
-		{
-			temp = inbyte->GetAt(138);
-			temp1 = inbyte->GetAt(140);
-			f_s_tp13 = caldec(temp, temp1, 0);
-		}
-		if (k == 139)
-		{
-			temp = inbyte->GetAt(139);
-			temp1 = inbyte->GetAt(140);
-			f_s_tp14 = caldec(temp, temp1, 1);
-		}
-		if (k == 159)
-		{
-			//高压1整数部分
-			temp = inbyte->GetAt(159);
-			temp1 = inbyte->GetAt(161);
-			f_s_gaoya = caldec_dlt(temp, temp1, 0);
-		}
-		if (k == 160)
-		{
-			//高压2整数部分
-			temp = inbyte->GetAt(160);
-			temp1 = inbyte->GetAt(161);
-			f_s_gaoya2 = caldec_dlt(temp, temp1, 1);
+			temp = CheckNegative(inbyte->GetAt(13), inbyte->GetAt(14));
+			s_fan2_real = temp;
 		}
 	}
+
 }
 
 //响应从机运行参数
@@ -2695,6 +1500,31 @@ void air::modify_out_para_s(int slave_no, CByteArray* outbyte)
 //	wadd_pump=temp1&0x01;*/
 //}
 
+int air::CheckNegative(const BYTE bHight, const BYTE bLow)
+{
+	int nTemp = 0;
+	UINT uHight;
+	UINT uLow;
+
+
+	nTemp = bHight & 0x80;
+	if (nTemp == 128)
+	{
+		uHight = bHight << 8;
+		uLow = bLow;
+		nTemp = ~((0xFFFF0000 | uHight | uLow) - 0x1);
+		nTemp = -nTemp;
+	}
+	else
+	{
+		uHight = bHight << 8;
+		uLow = bLow;
+		nTemp = uHight | uLow;
+	}
+
+	return nTemp;
+}
+
 void air::reply_slave_para(CByteArray* inbyte)
 {
 	int temp, temp1;
@@ -3157,30 +1987,33 @@ void air::modify_out_para_24(CByteArray* outbyte) //6号命令
 }
 void air::reply_test_status(CByteArray* inbyte)
 {
+
 	int temp, temp1;
 	int byte_count;
 	//byte(3到5)是线控器设置的温度模式等
 	//byte(6到9)是主机状态
+	out_version = CheckNegative(inbyte->GetAt(3), inbyte->GetAt(4));
 
-	temp = inbyte->GetAt(3);
-	//（拨码开关，0  OFF  1ON） 
-	sw11 = temp & 0x01;
-	temp1 = temp >> 1;
-	sw12 = temp1 & 0x01;
-	temp1 = temp >> 2;
-	sw13 = temp1 & 0x01;
-	temp1 = temp >> 3;
-	sw14 = temp1 & 0x01;
-	temp1 = temp >> 4;
-	sw15 = temp1 & 0x01;
-	temp1 = temp >> 5;
-	sw16 = temp1 & 0x01;
-	temp1 = temp >> 6;
-	sw17 = temp1 & 0x01;
-	temp1 = temp >> 7;
-	sw18= temp1 & 0x01;
+	//temp = inbyte->GetAt(5);
+	////（拨码开关，0  OFF  1ON） 
+	//sw11 = temp & 0x01;
+	//temp1 = temp >> 1;
+	//sw12 = temp1 & 0x01;
+	//temp1 = temp >> 2;
+	//sw13 = temp1 & 0x01;
+	//temp1 = temp >> 3;
+	//sw14 = temp1 & 0x01;
+	//temp1 = temp >> 4;
+	//sw15 = temp1 & 0x01;
+	//temp1 = temp >> 5;
+	//sw16 = temp1 & 0x01;
+	//temp1 = temp >> 6;
+	//sw17 = temp1 & 0x01;
+	//temp1 = temp >> 7;
+	//sw18= temp1 & 0x01;
 
-	temp = inbyte->GetAt(4);
+	
+	temp = inbyte->GetAt(5);
 	DI1 = temp & 0x01;
 	temp1 = temp >> 1;
 	DI2 = temp1 & 0x01;
@@ -3197,7 +2030,7 @@ void air::reply_test_status(CByteArray* inbyte)
 	temp1 = temp >> 7;
 	DI8 = temp1 & 0x01;
 
-	temp = inbyte->GetAt(5);
+	temp = inbyte->GetAt(6);
 	DI9 = temp & 0x01;
 	temp1 = temp >> 1;
 	DI10 = temp1 & 0x01;
@@ -3205,146 +2038,10 @@ void air::reply_test_status(CByteArray* inbyte)
 	DI11 = temp1 & 0x01;
 	temp1 = temp >> 3;
 	DI12 = temp1 & 0x01;
-	temp1 = temp >> 4;
-	DI13 = temp1 & 0x01;
-	temp1 = temp >> 5;
-	DI14 = temp1 & 0x01;
-	temp1 = temp >> 6;
-	DI15 = temp1 & 0x01;
-	temp1 = temp >> 7;
-	DI16 = temp1 & 0x01;
-
-	temp = inbyte->GetAt(6);
-	DO1 = temp & 0x01;
-	temp1 = temp >> 1;
-	DO2 = temp1 & 0x01;
-	temp1 = temp >> 2;
-	DO3 = temp1 & 0x01;
-	temp1 = temp >> 3;
-	DO4 = temp1 & 0x01;
-	temp1 = temp >> 4;
-	DO5 = temp1 & 0x01;
-	temp1 = temp >> 5;
-	DO6 = temp1 & 0x01;
-	temp1 = temp >> 6;
-	DO7 = temp1 & 0x01;
-	temp1 = temp >> 7;
-	DO8 = temp1 & 0x01;
 
 	temp = inbyte->GetAt(7);
-	DO9 = temp & 0x01;
-	temp1 = temp >> 1;
-	DO10 = temp1 & 0x01;
-	temp1 = temp >> 2;
-	DO11 = temp1 & 0x01;
-	temp1 = temp >> 3;
-	DO12 = temp1 & 0x01;
-	temp1 = temp >> 4;
-	DO13 = temp1 & 0x01;
-	temp1 = temp >> 5;
-	DO14 = temp1 & 0x01;
-	temp1 = temp >> 6;
-	DO15 = temp1 & 0x01;
-	temp1 = temp >> 7;
-	DO16 = temp1 & 0x01;
-
-	temp = inbyte->GetAt(8);
-	DO17 = temp1 & 0x01;
-	temp1 = temp >> 1;
-	DO18 = temp1 & 0x01;
-	temp1 = temp >> 2;
-	DO19 = temp1 & 0x01;
-
-	temp = inbyte->GetAt(9);
-	//（拨码开关，0  OFF  1ON） 
-	sw11_f = temp & 0x01;
-	temp1 = temp >> 1;
-	sw12_f = temp1 & 0x01;
-	temp1 = temp >> 2;
-	sw13_f = temp1 & 0x01;
-	temp1 = temp >> 3;
-	sw14_f = temp1 & 0x01;
-	temp1 = temp >> 4;
-	sw15_f = temp1 & 0x01;
-	temp1 = temp >> 5;
-	sw16_f = temp1 & 0x01;
-	temp1 = temp >> 6;
-	sw17_f = temp1 & 0x01;
-	temp1 = temp >> 7;
-	sw18_f = temp1 & 0x01;
-
-	temp = inbyte->GetAt(10);
 	DIF1 = temp & 0x01;
 	temp1 = temp >> 1;
 	DIF2 = temp1 & 0x01;
-	temp1 = temp >> 2;
-	DIF3 = temp1 & 0x01;
-	temp1 = temp >> 3;
-	DIF4 = temp1 & 0x01;
-	temp1 = temp >> 4;
-	DIF5 = temp1 & 0x01;
-	temp1 = temp >> 5;
-	DIF6 = temp1 & 0x01;
-	temp1 = temp >> 6;
-	DIF7 = temp1 & 0x01;
-	temp1 = temp >> 7;
-	DIF8 = temp1 & 0x01;
 
-	temp = inbyte->GetAt(11);
-	DIF9 = temp & 0x01;
-	temp1 = temp >> 1;
-	DIF10 = temp1 & 0x01;
-	temp1 = temp >> 2;
-	DIF11 = temp1 & 0x01;
-	temp1 = temp >> 3;
-	DIF12 = temp1 & 0x01;
-	temp1 = temp >> 4;
-	DIF13 = temp1 & 0x01;
-	temp1 = temp >> 5;
-	DIF14 = temp1 & 0x01;
-	temp1 = temp >> 6;
-	DIF15 = temp1 & 0x01;
-	temp1 = temp >> 7;
-	DIF16 = temp1 & 0x01;
-
-	temp = inbyte->GetAt(12);
-	DOF1 = temp & 0x01;
-	temp1 = temp >> 1;
-	DOF2 = temp1 & 0x01;
-	temp1 = temp >> 2;
-	DOF3 = temp1 & 0x01;
-	temp1 = temp >> 3;
-	DOF4 = temp1 & 0x01;
-	temp1 = temp >> 4;
-	DOF5 = temp1 & 0x01;
-	temp1 = temp >> 5;
-	DOF6 = temp1 & 0x01;
-	temp1 = temp >> 6;
-	DOF7 = temp1 & 0x01;
-	temp1 = temp >> 7;
-	DOF8 = temp1 & 0x01;
-
-	temp = inbyte->GetAt(13);
-	DOF9 = temp & 0x01;
-	temp1 = temp >> 1;
-	DOF10 = temp1 & 0x01;
-	temp1 = temp >> 2;
-	DOF11 = temp1 & 0x01;
-	temp1 = temp >> 3;
-	DOF12 = temp1 & 0x01;
-	temp1 = temp >> 4;
-	DOF13 = temp1 & 0x01;
-	temp1 = temp >> 5;
-	DOF14 = temp1 & 0x01;
-	temp1 = temp >> 6;
-	DOF15 = temp1 & 0x01;
-	temp1 = temp >> 7;
-	DOF16 = temp1 & 0x01;
-
-	temp = inbyte->GetAt(14);
-	DOF17 = temp1 & 0x01;
-	temp1 = temp >> 1;
-	DOF18 = temp1 & 0x01;
-	temp1 = temp >> 2;
-	DOF19 = temp1 & 0x01;
 }
