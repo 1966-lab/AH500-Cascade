@@ -416,7 +416,7 @@ void CMDSView::OnInitialUpdate()
 	tempstr.Format("%d", pdoc->airnum);
 	m_outnumberedit.SetWindowText(tempstr);
 	m_airno.SetCurSel(0);
-	m_cmb_yun.SetCurSel(0);
+	m_cmb_yun.SetCurSel(1);
 	m_comNo.SetCurSel(pdoc->m_commNo - 1);
 	m_bandno.SetCurSel(pdoc->m_commband);
 	SetTimer(4, 1000, NULL);
@@ -1422,17 +1422,10 @@ void CMDSView::OnTimer(UINT nIDEvent)
 
 					outfile.Close();
 					bSendCmd[iStep - 1] = TRUE;
-					//  if(pdoc->airlist[airNo].s_waterswitch==1)//0闭合1断开
-					   //{
-					   //	MessAddString("水流开关断开");
-					   //	errflag=1;
-					   //	iStep=620;
-					   //}
 				}
-				else //if(pdoc->airlist[airNo].s_runmode==1 || pdoc->airlist[airNo].s_runmode==2)//启动成功
+				else
 				{
 					iStep += 10;
-					///iStep = 580;
 					CArchive outfile(&logFile, CArchive::store);
 					outfile.WriteString(GetCurTime());
 					if (m_iUnitType == 4) //xu170511 add 热泵
@@ -1494,12 +1487,14 @@ void CMDSView::OnTimer(UINT nIDEvent)
 				MessAddString("检测程序版本");
 				//tempstr.Format("%.1f", (float)pdoc->airlist[airNo].out_version / 10);
 				int v1, v2, v3;
-				v3 = pdoc->airlist[airNo].out_version / 10;
-				v2 = pdoc->airlist[airNo].out_version % 10;
-				v1 = pdoc->airlist[airNo].out_version_end;
-				tempstr.Format("%.1d.%.1d.%.1d", v3, v2, v1);
+				v3 = pdoc->airlist[airNo].out_version >> 8;
+				v3 = v3 & 0xf;
+				v2 = pdoc->airlist[airNo].out_version >> 4;
+				v2 = v2 & 0xf;
+				v1 = pdoc->airlist[airNo].out_version & 0xf;
+				tempstr.Format("%.1X.%.1X.%.1X", v3, v2, v1);
 				CString strTemp;
-				m_edit_g.GetWindowText(strTemp);
+				m_edit_n.GetWindowText(strTemp);
 				if (tempstr != strTemp)
 				{
 					CArchive outfile(&logFile, CArchive::store);
@@ -1524,385 +1519,115 @@ void CMDSView::OnTimer(UINT nIDEvent)
 				bSendCmd[iStep - 10] = TRUE;
 				iStep += 10;
 				iLastTime = GetTickCount();
-				MessAddString("检测拨码是否与机组型号一致");
-				if (pdoc->airlist[airNo].sw11 == 1)
-				{
-					CArchive outfile(&logFile, CArchive::store);
-					outfile.WriteString(GetCurTime()); outfile.WriteString(" SW1.1拨码错误\r\n");
-					outfile.Close();
-					m_alarmlist3.AddString(strWrong + "SW1.1拨码");
-					vecErr.push_back(strWrong + "SW1.1拨码");
-					errflag = 1;
-					iStep = iEndStep;
-				}
-				else
-				{
-					CArchive outfile(&logFile, CArchive::store);
-					outfile.WriteString(GetCurTime()); outfile.WriteString(" SW1.1拨码正确\r\n");
-					outfile.Close();
-					m_alarmlist3.AddString(strRight + "SW1.1拨码");
-					vecErr.push_back(strRight + "SW1.1拨码");
-				}
-				if (pdoc->airlist[airNo].sw12 == 1)
-				{
-					CArchive outfile(&logFile, CArchive::store);
-					outfile.WriteString(GetCurTime()); outfile.WriteString(" SW1.2拨码错误\r\n");
-					outfile.Close();
-					m_alarmlist3.AddString(strWrong + "SW1.2拨码");
-					vecErr.push_back(strWrong + "SW1.2拨码");
-					errflag = 1;
-					iStep = iEndStep;
-				}
-				else
-				{
-					CArchive outfile(&logFile, CArchive::store);
-					outfile.WriteString(GetCurTime()); outfile.WriteString(" SW1.2拨码正确\r\n");
-					outfile.Close();
-					m_alarmlist3.AddString(strRight + "SW1.2拨码");
-					vecErr.push_back(strRight + "SW1.2拨码");
-				}
-				if (pdoc->airlist[airNo].sw13 == 1)
-				{
-					CArchive outfile(&logFile, CArchive::store);
-					outfile.WriteString(GetCurTime()); outfile.WriteString(" SW1.3拨码错误\r\n");
-					outfile.Close();
-					m_alarmlist3.AddString(strWrong + "SW1.3拨码");
-					vecErr.push_back(strWrong + "SW1.3拨码");
-					errflag = 1;
-					iStep = iEndStep;
-				}
-				else
-				{
-					CArchive outfile(&logFile, CArchive::store);
-					outfile.WriteString(GetCurTime()); outfile.WriteString(" SW1.3拨码正确\r\n");
-					outfile.Close();
-					m_alarmlist3.AddString(strRight + "SW1.3拨码");
-					vecErr.push_back(strRight + "SW1.3拨码");
-				}
-				if (pdoc->airlist[airNo].sw14 == 1)
-				{
-					CArchive outfile(&logFile, CArchive::store);
-					outfile.WriteString(GetCurTime()); outfile.WriteString(" SW1.4拨码错误\r\n");
-					outfile.Close();
-					m_alarmlist3.AddString(strWrong + "SW1.4拨码");
-					vecErr.push_back(strWrong + "SW1.4拨码");
-					errflag = 1;
-					iStep = iEndStep;
-				}
-				else
-				{
-					CArchive outfile(&logFile, CArchive::store);
-					outfile.WriteString(GetCurTime()); outfile.WriteString(" SW1.4拨码正确\r\n");
-					outfile.Close();
-					m_alarmlist3.AddString(strRight + "SW1.4拨码");
-					vecErr.push_back(strRight + "SW1.4拨码");
-				}
-				if (stricmp(models_tag, "1600") == 0)
-				{
-					if (pdoc->airlist[airNo].sw15 == 0)
-					{
-						CArchive outfile(&logFile, CArchive::store);
-						outfile.WriteString(GetCurTime()); outfile.WriteString(" SW1.5拨码错误\r\n");
-						outfile.Close();
-						m_alarmlist3.AddString(strWrong + "SW1.5拨码");
-						vecErr.push_back(strWrong + "SW1.5拨码");
+
+				// 添加测试消息
+				MessAddString("TH1/2/3/4/9/10/11/12/13/14 TH8 温差");
+				// 获取阈值
+				float a;
+				CString strTemp;
+				m_edit_e.GetWindowText(strTemp);
+				a = atof(strTemp);
+
+				// 定义传感器比较配置结构体
+				struct SensorComparison {
+					float* temp1;        // 第一个温度指针
+					float* temp2;        // 第二个温度指针
+					CString name1;       // 第一个传感器名称
+					CString name2;       // 第二个传感器名称
+					float threshold;     // 阈值
+					bool useCustomThreshold; // 是否使用自定义阈值
+					bool checkRange;     // 是否检查温度范围
+
+					// 构造函数
+					SensorComparison(float* t1, float* t2, const CString& n1, const CString& n2, float th, bool useCustom, bool checkRange = false)
+						: temp1(t1), temp2(t2), name1(n1), name2(n2), threshold(th), useCustomThreshold(useCustom), checkRange(checkRange) {}
+				};
+
+				// 创建并填充比较配置数组
+				std::vector<SensorComparison> comparisons;
+				// 温度传感器（需要检查范围）
+				comparisons.push_back(SensorComparison(&pdoc->airlist[airNo].s_tp1, &pdoc->airlist[airNo].s_tp8, "TH1", "TH8", a, true, true));
+				comparisons.push_back(SensorComparison(&pdoc->airlist[airNo].s_tp2, &pdoc->airlist[airNo].s_tp8, "TH2", "TH8", a, true, true));
+				comparisons.push_back(SensorComparison(&pdoc->airlist[airNo].s_tp3, &pdoc->airlist[airNo].s_tp8, "TH3", "TH8", a, true, true));
+				comparisons.push_back(SensorComparison(&pdoc->airlist[airNo].s_tp4, &pdoc->airlist[airNo].s_tp8, "TH4", "TH8", a, true, true));
+				comparisons.push_back(SensorComparison(&pdoc->airlist[airNo].s_tp9, &pdoc->airlist[airNo].s_tp8, "TH9", "TH8", a, true, true));
+				comparisons.push_back(SensorComparison(&pdoc->airlist[airNo].s_tp10, &pdoc->airlist[airNo].s_tp8, "TH10", "TH8", a, true, true));
+				comparisons.push_back(SensorComparison(&pdoc->airlist[airNo].s_tp11, &pdoc->airlist[airNo].s_tp8, "TH11", "TH8", a, true, true));
+				comparisons.push_back(SensorComparison(&pdoc->airlist[airNo].s_tp12, &pdoc->airlist[airNo].s_tp8, "TH12", "TH8", a, true, true));
+				comparisons.push_back(SensorComparison(&pdoc->airlist[airNo].s_tp13, &pdoc->airlist[airNo].s_tp8, "TH13", "TH8", a, true, true));
+				comparisons.push_back(SensorComparison(&pdoc->airlist[airNo].s_tp14, &pdoc->airlist[airNo].s_tp8, "TH14", "TH8", a, true, true));
+				comparisons.push_back(SensorComparison(&pdoc->airlist[airNo].s_tp6, &pdoc->airlist[airNo].s_tp7, "TH6", "TH7", 2.0f, false, true));
+
+				// 压力传感器（不需要检查温度范围）
+				comparisons.push_back(SensorComparison(&pdoc->airlist[airNo].s_gaoya1, &pdoc->airlist[airNo].s_lowpre, "HS1", "LS1", 2.0f, false));
+				comparisons.push_back(SensorComparison(&pdoc->airlist[airNo].s_gaoya2, &pdoc->airlist[airNo].s_highpre, "HS2", "LS2", 2.0f, false));
+				comparisons.push_back(SensorComparison(&pdoc->airlist[airNo].s_gaoya1, &pdoc->airlist[airNo].s_gaoya2, "HS1", "HS2", 2.0f, false));
+				comparisons.push_back(SensorComparison(&pdoc->airlist[airNo].s_lowpre, &pdoc->airlist[airNo].s_highpre, "LS1", "LS2", 2.0f, false));
+				comparisons.push_back(SensorComparison(&pdoc->airlist[airNo].f_s_gaoya1, &pdoc->airlist[airNo].f_s_lowpre, "HS3", "LS3", 2.0f, false));
+				comparisons.push_back(SensorComparison(&pdoc->airlist[airNo].f_s_gaoya2, &pdoc->airlist[airNo].f_s_highpre, "HS4", "LS4", 2.0f, false));
+				comparisons.push_back(SensorComparison(&pdoc->airlist[airNo].f_s_gaoya1, &pdoc->airlist[airNo].f_s_gaoya2, "HS3", "HS4", 2.0f, false));
+				comparisons.push_back(SensorComparison(&pdoc->airlist[airNo].f_s_lowpre, &pdoc->airlist[airNo].f_s_highpre, "LS3", "LS4", 2.0f, false));
+
+				// 一次性打开文件归档（只在有错误时写入）
+				bool hasErrorInThisStep = false;
+				CString errorLogContent;
+
+				// 遍历所有比较
+				for (size_t i = 0; i < comparisons.size(); i++) {
+					const SensorComparison& comp = comparisons[i];
+					float temp1 = *comp.temp1;
+					float temp2 = *comp.temp2;
+					float cmpvalue = abs(temp1 - temp2);
+					float threshold = comp.useCustomThreshold ? comp.threshold : 2.0f;
+
+					CString message = comp.name1 + " " + comp.name2 + " 温差";
+
+					// 检查温度范围（0-45度）
+					if (comp.checkRange) {
+						if (temp1 < 0 || temp1 > 45) {
+							CString rangeError;
+							rangeError.Format("%s %s 温度超出范围(%.1f°C)\r\n", GetCurTime(), comp.name1, temp1);
+							errorLogContent += rangeError;
+							m_alarmlist3.AddString(strWrong + comp.name1 + " 温度超限");
+							vecErr.push_back(strWrong + comp.name1 + " 温度超限");
+							errflag = 1;
+							hasErrorInThisStep = true;
+						}
+
+						if (temp2 < 0 || temp2 > 45) {
+							CString rangeError;
+							rangeError.Format("%s %s 温度超出范围(%.1f°C)\r\n", GetCurTime(), comp.name2, temp2);
+							errorLogContent += rangeError;
+							m_alarmlist3.AddString(strWrong + comp.name2 + " 温度超限");
+							vecErr.push_back(strWrong + comp.name2 + " 温度超限");
+							errflag = 1;
+							hasErrorInThisStep = true;
+						}
+					}
+
+					// 检查温差
+					if (cmpvalue > threshold) {
+						// 记录错误信息
+						CString tempError;
+						tempError.Format("%s %s %s 温差大(%.1f°C)\r\n", GetCurTime(), comp.name1, comp.name2, cmpvalue);
+						errorLogContent += tempError;
+						m_alarmlist3.AddString(strWrong + message);
+						vecErr.push_back(strWrong + message);
 						errflag = 1;
-						iStep = iEndStep;
+						hasErrorInThisStep = true;
 					}
-					else
-					{
-						CArchive outfile(&logFile, CArchive::store);
-						outfile.WriteString(GetCurTime()); outfile.WriteString(" SW1.5拨码正确\r\n");
-						outfile.Close();
-						m_alarmlist3.AddString(strRight + "SW1.5拨码");
-						vecErr.push_back(strRight + "SW1.5拨码");
+					else {
+						m_alarmlist3.AddString(strRight + message);
+						vecErr.push_back(strRight + message);
 					}
 				}
-				else
-				{
-					if (pdoc->airlist[airNo].sw15 == 1)
-					{
-						CArchive outfile(&logFile, CArchive::store);
-						outfile.WriteString(GetCurTime()); outfile.WriteString(" SW1.5拨码错误\r\n");
-						outfile.Close();
-						m_alarmlist3.AddString(strWrong + "SW1.5拨码");
-						vecErr.push_back(strWrong + "SW1.5拨码");
-						errflag = 1;
-						iStep = iEndStep;
-					}
-					else
-					{
-						CArchive outfile(&logFile, CArchive::store);
-						outfile.WriteString(GetCurTime()); outfile.WriteString(" SW1.5拨码正确\r\n");
-						outfile.Close();
-						m_alarmlist3.AddString(strRight + "SW1.5拨码");
-						vecErr.push_back(strRight + "SW1.5拨码");
-					}
-				}
-				if (pdoc->airlist[airNo].sw16 == 0)
-				{
+
+				// 如果有错误，写入日志文件并跳转到结束步骤
+				if (hasErrorInThisStep) {
 					CArchive outfile(&logFile, CArchive::store);
-					outfile.WriteString(GetCurTime()); outfile.WriteString(" SW1.6拨码错误\r\n");
+					outfile.WriteString(errorLogContent);
 					outfile.Close();
-					m_alarmlist3.AddString(strWrong + "SW1.6拨码");
-					vecErr.push_back(strWrong + "SW1.6拨码");
-					errflag = 1;
 					iStep = iEndStep;
-				}
-				else
-				{
-					CArchive outfile(&logFile, CArchive::store);
-					outfile.WriteString(GetCurTime()); outfile.WriteString(" SW1.6拨码正确\r\n");
-					outfile.Close();
-					m_alarmlist3.AddString(strRight + "SW1.6拨码");
-					vecErr.push_back(strRight + "SW1.6拨码");
-				}
-				if (pdoc->airlist[airNo].sw17 == 0)
-				{
-					CArchive outfile(&logFile, CArchive::store);
-					outfile.WriteString(GetCurTime()); outfile.WriteString(" SW1.7拨码错误\r\n");
-					outfile.Close();
-					m_alarmlist3.AddString(strWrong + "SW1.7拨码");
-					vecErr.push_back(strWrong + "SW1.7拨码");
-					errflag = 1;
-					iStep = iEndStep;
-				}
-				else
-				{
-					CArchive outfile(&logFile, CArchive::store);
-					outfile.WriteString(GetCurTime()); outfile.WriteString(" SW1.7拨码正确\r\n");
-					outfile.Close();
-					m_alarmlist3.AddString(strRight + "SW1.7拨码");
-					vecErr.push_back(strRight + "SW1.7拨码");
-				}
-				if (pdoc->airlist[airNo].sw18 == 0)
-				{
-					CArchive outfile(&logFile, CArchive::store);
-					outfile.WriteString(GetCurTime()); outfile.WriteString(" SW1.8拨码错误\r\n");
-					outfile.Close();
-					m_alarmlist3.AddString(strWrong + "SW1.8拨码");
-					vecErr.push_back(strWrong + "SW1.8拨码");
-					errflag = 1;
-					iStep = iEndStep;
-				}
-				else
-				{
-					CArchive outfile(&logFile, CArchive::store);
-					outfile.WriteString(GetCurTime()); outfile.WriteString(" SW1.8拨码正确\r\n");
-					outfile.Close();
-					m_alarmlist3.AddString(strRight + "SW1.8拨码");
-					vecErr.push_back(strRight + "SW1.8拨码");
-				}
-				MessAddString("检测副板拨码是否与机组型号一致");
-				if (pdoc->airlist[airNo].sw11_f == 1)
-				{
-					CArchive outfile(&logFile, CArchive::store);
-					outfile.WriteString(GetCurTime()); outfile.WriteString(" 副板SW1.1拨码错误\r\n");
-					outfile.Close();
-					m_alarmlist3.AddString(strWrong + "副板SW1.1拨码");
-					vecErr.push_back(strWrong + "副板SW1.1拨码");
-					errflag = 1;
-					iStep = iEndStep;
-				}
-				else
-				{
-					CArchive outfile(&logFile, CArchive::store);
-					outfile.WriteString(GetCurTime()); outfile.WriteString(" 副板SW1.1拨码正确\r\n");
-					outfile.Close();
-					m_alarmlist3.AddString(strRight + "副板SW1.1拨码");
-					vecErr.push_back(strRight + "副板SW1.1拨码");
-				}
-				if (pdoc->airlist[airNo].sw12_f == 1)
-				{
-					CArchive outfile(&logFile, CArchive::store);
-					outfile.WriteString(GetCurTime()); outfile.WriteString(" 副板SW1.2拨码错误\r\n");
-					outfile.Close();
-					m_alarmlist3.AddString(strWrong + "副板SW1.2拨码");
-					vecErr.push_back(strWrong + "副板SW1.2拨码");
-					errflag = 1;
-					iStep = iEndStep;
-				}
-				else
-				{
-					CArchive outfile(&logFile, CArchive::store);
-					outfile.WriteString(GetCurTime()); outfile.WriteString(" 副板SW1.2拨码正确\r\n");
-					outfile.Close();
-					m_alarmlist3.AddString(strRight + "副板SW1.2拨码");
-					vecErr.push_back(strRight + "副板SW1.2拨码");
-				}
-				if (pdoc->airlist[airNo].sw13_f == 1)
-				{
-					CArchive outfile(&logFile, CArchive::store);
-					outfile.WriteString(GetCurTime()); outfile.WriteString(" 副板SW1.3拨码错误\r\n");
-					outfile.Close();
-					m_alarmlist3.AddString(strWrong + "副板SW1.3拨码");
-					vecErr.push_back(strWrong + "副板SW1.3拨码");
-					errflag = 1;
-					iStep = iEndStep;
-				}
-				else
-				{
-					CArchive outfile(&logFile, CArchive::store);
-					outfile.WriteString(GetCurTime()); outfile.WriteString(" 副板SW1.3拨码正确\r\n");
-					outfile.Close();
-					m_alarmlist3.AddString(strRight + "副板SW1.3拨码");
-					vecErr.push_back(strRight + "副板SW1.3拨码");
-				}
-				if (pdoc->airlist[airNo].sw14_f == 1)
-				{
-					CArchive outfile(&logFile, CArchive::store);
-					outfile.WriteString(GetCurTime()); outfile.WriteString(" 副板SW1.4拨码错误\r\n");
-					outfile.Close();
-					m_alarmlist3.AddString(strWrong + "副板SW1.4拨码");
-					vecErr.push_back(strWrong + "副板SW1.4拨码");
-					errflag = 1;
-					iStep = iEndStep;
-				}
-				else
-				{
-					CArchive outfile(&logFile, CArchive::store);
-					outfile.WriteString(GetCurTime()); outfile.WriteString(" 副板SW1.4拨码正确\r\n");
-					outfile.Close();
-					m_alarmlist3.AddString(strRight + "副板SW1.4拨码");
-					vecErr.push_back(strRight + "副板SW1.4拨码");
-				}
-				if (stricmp(models_tag, "1600") == 0)
-				{
-					if (pdoc->airlist[airNo].sw15_f == 0)
-					{
-						CArchive outfile(&logFile, CArchive::store);
-						outfile.WriteString(GetCurTime()); outfile.WriteString(" 副板SW1.5拨码错误\r\n");
-						outfile.Close();
-						m_alarmlist3.AddString(strWrong + "副板SW1.5拨码");
-						vecErr.push_back(strWrong + "副板SW1.5拨码");
-						errflag = 1;
-						iStep = iEndStep;
-					}
-					else
-					{
-						CArchive outfile(&logFile, CArchive::store);
-						outfile.WriteString(GetCurTime()); outfile.WriteString(" 副板SW1.5拨码正确\r\n");
-						outfile.Close();
-						m_alarmlist3.AddString(strRight + "副板SW1.5拨码");
-						vecErr.push_back(strRight + "副板SW1.5拨码");
-					}
-				}
-				else
-				{
-					if (pdoc->airlist[airNo].sw15_f == 1)
-					{
-						CArchive outfile(&logFile, CArchive::store);
-						outfile.WriteString(GetCurTime()); outfile.WriteString(" 副板SW1.5拨码错误\r\n");
-						outfile.Close();
-						m_alarmlist3.AddString(strWrong + "副板SW1.5拨码");
-						vecErr.push_back(strWrong + "副板SW1.5拨码");
-						errflag = 1;
-						iStep = iEndStep;
-					}
-					else
-					{
-						CArchive outfile(&logFile, CArchive::store);
-						outfile.WriteString(GetCurTime()); outfile.WriteString(" 副板SW1.5拨码正确\r\n");
-						outfile.Close();
-						m_alarmlist3.AddString(strRight + "副板SW1.5拨码");
-						vecErr.push_back(strRight + "副板SW1.5拨码");
-					}
-				}
-				if (pdoc->airlist[airNo].sw16_f == 1)
-				{
-					CArchive outfile(&logFile, CArchive::store);
-					outfile.WriteString(GetCurTime()); outfile.WriteString(" 副板SW1.6拨码错误\r\n");
-					outfile.Close();
-					m_alarmlist3.AddString(strWrong + "副板SW1.6拨码");
-					vecErr.push_back(strWrong + "副板SW1.6拨码");
-					errflag = 1;
-					iStep = iEndStep;
-				}
-				else
-				{
-					CArchive outfile(&logFile, CArchive::store);
-					outfile.WriteString(GetCurTime()); outfile.WriteString(" 副板SW1.6拨码正确\r\n");
-					outfile.Close();
-					m_alarmlist3.AddString(strRight + "副板SW1.6拨码");
-					vecErr.push_back(strRight + "副板SW1.6拨码");
-				}
-				if (stricmp(models_tag, "1600") == 0)
-				{
-					if (pdoc->airlist[airNo].sw17_f == 0)
-					{
-						CArchive outfile(&logFile, CArchive::store);
-						outfile.WriteString(GetCurTime()); outfile.WriteString(" 副板SW1.7拨码错误\r\n");
-						outfile.Close();
-						m_alarmlist3.AddString(strWrong + "副板SW1.7拨码");
-						vecErr.push_back(strWrong + "副板SW1.7拨码");
-						errflag = 1;
-						iStep = iEndStep;
-					}
-					else
-					{
-						CArchive outfile(&logFile, CArchive::store);
-						outfile.WriteString(GetCurTime()); outfile.WriteString(" 副板SW1.7拨码正确\r\n");
-						outfile.Close();
-						m_alarmlist3.AddString(strRight + "副板SW1.7拨码");
-						vecErr.push_back(strRight + "副板SW1.7拨码");
-					}
-					if (pdoc->airlist[airNo].sw18_f == 0)
-					{
-						CArchive outfile(&logFile, CArchive::store);
-						outfile.WriteString(GetCurTime()); outfile.WriteString(" 副板SW1.8拨码错误\r\n");
-						outfile.Close();
-						m_alarmlist3.AddString(strWrong + "副板SW1.8拨码");
-						vecErr.push_back(strWrong + "副板SW1.8拨码");
-						errflag = 1;
-						iStep = iEndStep;
-					}
-					else
-					{
-						CArchive outfile(&logFile, CArchive::store);
-						outfile.WriteString(GetCurTime()); outfile.WriteString(" 副板SW1.8拨码正确\r\n");
-						outfile.Close();
-						m_alarmlist3.AddString(strRight + "副板SW1.8拨码");
-						vecErr.push_back(strRight + "副板SW1.8拨码");
-					}
-				}
-				else
-				{
-					if (pdoc->airlist[airNo].sw17_f == 1)
-					{
-						CArchive outfile(&logFile, CArchive::store);
-						outfile.WriteString(GetCurTime()); outfile.WriteString(" 副板SW1.7拨码错误\r\n");
-						outfile.Close();
-						m_alarmlist3.AddString(strWrong + "副板SW1.7拨码");
-						vecErr.push_back(strWrong + "副板SW1.7拨码");
-						errflag = 1;
-						iStep = iEndStep;
-					}
-					else
-					{
-						CArchive outfile(&logFile, CArchive::store);
-						outfile.WriteString(GetCurTime()); outfile.WriteString(" 副板SW1.7拨码正确\r\n");
-						outfile.Close();
-						m_alarmlist3.AddString(strRight + "副板SW1.7拨码");
-						vecErr.push_back(strRight + "副板SW1.7拨码");
-					}
-					if (pdoc->airlist[airNo].sw18_f == 1)
-					{
-						CArchive outfile(&logFile, CArchive::store);
-						outfile.WriteString(GetCurTime()); outfile.WriteString(" 副板SW1.8拨码错误\r\n");
-						outfile.Close();
-						m_alarmlist3.AddString(strWrong + "副板SW1.8拨码");
-						vecErr.push_back(strWrong + "副板SW1.8拨码");
-						errflag = 1;
-						iStep = iEndStep;
-					}
-					else
-					{
-						CArchive outfile(&logFile, CArchive::store);
-						outfile.WriteString(GetCurTime()); outfile.WriteString(" 副板SW1.8拨码正确\r\n");
-						outfile.Close();
-						m_alarmlist3.AddString(strRight + "副板SW1.8拨码");
-						vecErr.push_back(strRight + "副板SW1.8拨码");
-					}
 				}
 			}
 			if (iStep == 40 && (GetTickCount() - iLastTime) >= 500) //系统电加热过载是否闭合
@@ -1910,261 +1635,137 @@ void CMDSView::OnTimer(UINT nIDEvent)
 				bSendCmd[iStep - 10] = TRUE;
 				iStep += 10;
 				iLastTime = GetTickCount();
-
+				MessAddString("系统1电流CT1/CT2");
+				if (pdoc->airlist[airNo].s_ele <= 2 && pdoc->airlist[airNo].s_ele2 <= 2)
+				{
+					CArchive outfile(&logFile, CArchive::store);
+					outfile.WriteString(GetCurTime()); outfile.WriteString(" 电流CT1/CT2 >2\r\n");
+					outfile.Close();
+					m_alarmlist3.AddString(strWrong + "电流CT1/CT2");
+					vecErr.push_back(strWrong + "电流CT1/CT2");
+				}
+				else
+				{
+					CArchive outfile(&logFile, CArchive::store);
+					outfile.WriteString(GetCurTime()); outfile.WriteString(" 电流CT1/CT2正常\r\n");
+					outfile.Close();
+					m_alarmlist3.AddString(strRight + "电流CT1/CT2");
+					vecErr.push_back(strRight + "电流CT1/CT2");
+				}
+				MessAddString("系统2电流CT1/CT2");
+				if (pdoc->airlist[airNo].f_s_ele1 <= 2 && pdoc->airlist[airNo].f_s_ele2 <= 2)
+				{
+					CArchive outfile(&logFile, CArchive::store);
+					outfile.WriteString(GetCurTime()); outfile.WriteString(" 电流CT1/CT2 >2\r\n");
+					outfile.Close();
+					m_alarmlist3.AddString(strWrong + "电流CT1/CT2");
+					vecErr.push_back(strWrong + "电流CT1/CT2");
+				}
+				else
+				{
+					CArchive outfile(&logFile, CArchive::store);
+					outfile.WriteString(GetCurTime()); outfile.WriteString(" 电流CT1/CT2正常\r\n");
+					outfile.Close();
+					m_alarmlist3.AddString(strRight + "电流CT1/CT2");
+					vecErr.push_back(strRight + "电流CT1/CT2");
+				}
 			}
 			if (iStep == 50 && (GetTickCount() - iLastTime) >= 50) //系统电加热过载是否闭合
 			{
 				bSendCmd[iStep - 10] = TRUE;
-				iStep += 1;
+				iStep += 10;
 				iLastTime = GetTickCount();
-				MessAddString("TH1 TH8 温差");
-				float a;
-				CString strTemp;
-				m_edit_e.GetWindowText(strTemp);
-				a = atof(strTemp);
-				float cmpvalue = pdoc->airlist[airNo].s_tp1 - pdoc->airlist[airNo].s_tp8;//th1-th9
-				if (abs(cmpvalue) > a)//下降温度超过2度，表示传感器测试合格
-				{
-					CArchive outfile(&logFile, CArchive::store);
-					outfile.WriteString(GetCurTime()); outfile.WriteString(" TH1 TH8 温差大\r\n");
-					outfile.Close();
-					m_alarmlist3.AddString(strWrong + "TH1 TH8 温差");
-					vecErr.push_back(strWrong + "TH1 TH8 温差");
-					errflag = 1;
-					//iStep = iEndStep;
-				}
-				else
-				{
-					m_alarmlist3.AddString(strRight + "TH1 TH8 温差");
-					vecErr.push_back(strRight + "TH1 TH8 温差");
-				}
-			}
-			if (iStep == 51 && (GetTickCount() - iLastTime) >= 50)
-			{
-				bSendCmd[iStep - 10] = TRUE;
-				iStep += 1;
-				iLastTime = GetTickCount();
-				MessAddString("TH2 TH8 温差");
-				float a;
-				CString strTemp;
-				m_edit_e.GetWindowText(strTemp);
-				a = atof(strTemp);
-				float cmpvalue2 = pdoc->airlist[airNo].s_tp2 - pdoc->airlist[airNo].s_tp8;//th1-th9
-				if (abs(cmpvalue2) > a)//下降温度超过2度，表示传感器测试合格
-				{
-					CArchive outfile(&logFile, CArchive::store);
-					outfile.WriteString(GetCurTime()); outfile.WriteString(" TH2 TH8 温差大\r\n");
-					outfile.Close();
-					m_alarmlist3.AddString(strWrong + "TH2 TH8 温差");
-					vecErr.push_back(strWrong + "TH2 TH8 温差");
-					errflag = 1;
-					//iStep = iEndStep;
-				}
-				else
-				{
-					m_alarmlist3.AddString(strRight + "TH2 TH8 温差");
-					vecErr.push_back(strRight + "TH2 TH8 温差");
-				}
-			}
-			if (iStep == 52)
-			{
-				bSendCmd[iStep - 10] = TRUE;
-				iStep += 1;
-				iLastTime = GetTickCount();
-				MessAddString("TH9 TH8 温差");
-				float a;
-				CString strTemp;
-				m_edit_e.GetWindowText(strTemp);
-				a = atof(strTemp);
-				float cmpvalue9 = pdoc->airlist[airNo].s_tp9 - pdoc->airlist[airNo].s_tp8;//th1-th9
-				if (abs(cmpvalue9) > a)//下降温度超过2度，表示传感器测试合格
-				{
-					CArchive outfile(&logFile, CArchive::store);
-					outfile.WriteString(GetCurTime()); outfile.WriteString(" TH9 TH8 温差大\r\n");
-					outfile.Close();
-					m_alarmlist3.AddString(strWrong + "TH9 TH8 温差");
-					vecErr.push_back(strWrong + "TH9 TH8 温差");
-					errflag = 1;
-					//iStep = iEndStep;
-				}
-				else
-				{
-					m_alarmlist3.AddString(strRight + "TH9 TH8 温差");
-					vecErr.push_back(strRight + "TH9 TH8 温差");
-				}
-			}
-			if (iStep == 53 && (GetTickCount() - iLastTime) >= 50)
-			{
-				bSendCmd[iStep - 10] = TRUE;
-				iStep += 1;
-				iLastTime = GetTickCount();
-				MessAddString("TH10 TH8 温差");
-				float a;
-				CString strTemp;
-				m_edit_e.GetWindowText(strTemp);
-				a = atof(strTemp);
-				float cmpvalue10 = pdoc->airlist[airNo].s_tp10 - pdoc->airlist[airNo].s_tp8;//th1-th9
-				if (abs(cmpvalue10) > a)//下降温度超过2度，表示传感器测试合格
-				{
-					CArchive outfile(&logFile, CArchive::store);
-					outfile.WriteString(GetCurTime()); outfile.WriteString(" TH10 TH8 温差大\r\n");
-					outfile.Close();
-					m_alarmlist3.AddString(strWrong + "TH10 TH8 温差");
-					vecErr.push_back(strWrong + "TH10 TH8 温差");
-					errflag = 1;
-					//iStep = iEndStep;
-				}
-				else
-				{
-					m_alarmlist3.AddString(strRight + "TH10 TH8 温差");
-					vecErr.push_back(strRight + "TH10 TH8 温差");
-				}
-			}
-			if (iStep == 54 && (GetTickCount() - iLastTime) >= 50)
-			{
-				bSendCmd[iStep - 10] = TRUE;
-				iStep += 6;
-				iLastTime = GetTickCount();
-				MessAddString("TH11 TH8 温差");
-				float a;
-				CString strTemp;
-				m_edit_e.GetWindowText(strTemp);
-				a = atof(strTemp);
-				float cmpvalue11 = pdoc->airlist[airNo].s_tp11 - pdoc->airlist[airNo].s_tp8;//th1-th9
-				if (abs(cmpvalue11) > a)//下降温度超过2度，表示传感器测试合格
-				{
-					CArchive outfile(&logFile, CArchive::store);
-					outfile.WriteString(GetCurTime()); outfile.WriteString(" TH11 TH8 温差大\r\n");
-					outfile.Close();
-					m_alarmlist3.AddString(strWrong + "TH11 TH8 温差");
-					vecErr.push_back(strWrong + "TH11 TH8 温差");
-					errflag = 1;
-					//iStep = iEndStep;
-				}
-				else
-				{
-					m_alarmlist3.AddString(strRight + "TH11 TH8 温差");
-					vecErr.push_back(strRight + "TH11 TH8 温差");
-				}
-			}
-			if (iStep == 60 && (GetTickCount() - iLastTime) >= 50)
-			{
-				bSendCmd[iStep - 10] = TRUE;
-				iStep += 5;
-				iLastTime = GetTickCount();
-				MessAddString("TH12 TH8 温差");
-				float a;
-				CString strTemp;
-				m_edit_e.GetWindowText(strTemp);
-				a = atof(strTemp);
-				float cmpvalue12 = pdoc->airlist[airNo].s_tp12 - pdoc->airlist[airNo].s_tp8;//th1-th9
-				if (abs(cmpvalue12) > a)//下降温度超过2度，表示传感器测试合格
-				{
-					CArchive outfile(&logFile, CArchive::store);
-					outfile.WriteString(GetCurTime()); outfile.WriteString(" TH12 TH8 温差大\r\n");
-					outfile.Close();
-					m_alarmlist3.AddString(strWrong + "TH12 TH8 温差");
-					vecErr.push_back(strWrong + "TH12 TH8 温差");
-					errflag = 1;
-					//iStep = iEndStep;
-				}
-				else
-				{
-					m_alarmlist3.AddString(strRight + "TH12 TH8 温差");
-					vecErr.push_back(strRight + "TH12 TH8 温差");
-				}
-			}
-			if (iStep == 65 && (GetTickCount() - iLastTime) >= 50)
-			{
-				bSendCmd[iStep - 10] = TRUE;
-				iStep += 5;
-				iLastTime = GetTickCount();
-				MessAddString("TH5 TH8 温差");
-				float a;
-				CString strTemp;
-				m_edit_e.GetWindowText(strTemp);
-				a = atof(strTemp);
-				float cmpvalue5 = pdoc->airlist[airNo].s_tp5 - pdoc->airlist[airNo].s_tp8;//th1-th9
-				if (abs(cmpvalue5) > a)//下降温度超过2度，表示传感器测试合格
-				{
-					CArchive outfile(&logFile, CArchive::store);
-					outfile.WriteString(GetCurTime()); outfile.WriteString(" TH5 TH8 温差大\r\n");
-					outfile.Close();
-					m_alarmlist3.AddString(strWrong + "TH5 TH8 温差");
-					vecErr.push_back(strWrong + "TH5 TH8 温差");
-					errflag = 1;
-					//iStep = iEndStep;
-				}
-				else
-				{
-					m_alarmlist3.AddString(strRight + "TH5 TH8 温差");
-					vecErr.push_back(strRight + "TH5 TH8 温差");
-				}
-				MessAddString("TH6 TH7 温差");
-				cmpvalue5 = pdoc->airlist[airNo].s_tp6 - pdoc->airlist[airNo].s_tp7;//th1-th9
-				if (abs(cmpvalue5) > a)//下降温度超过2度，表示传感器测试合格
-				{
-					CArchive outfile(&logFile, CArchive::store);
-					outfile.WriteString(GetCurTime()); outfile.WriteString(" TH6 TH7 温差大\r\n");
-					outfile.Close();
-					m_alarmlist3.AddString(strWrong + "TH6 TH7 温差");
-					vecErr.push_back(strWrong + "TH6 TH7 温差");
-					errflag = 1;
-				}
-				else
-				{
-					m_alarmlist3.AddString(strRight + "TH6 TH7 温差");
-					vecErr.push_back(strRight + "TH6 TH7 温差");
-				}
-				MessAddString("LP1 LP2比较");
-				if (fabs(pdoc->airlist[airNo].s_lowpre - pdoc->airlist[airNo].s_highpre) > 1.2f)//下降温度超过2度，表示传感器测试合格
-				{
-					CArchive outfile(&logFile, CArchive::store);
-					outfile.WriteString(GetCurTime()); outfile.WriteString(" LP1 LP2 压力差大\r\n");
-					outfile.Close();
-					m_alarmlist3.AddString(strWrong + "LP1 LP2比较");
-					vecErr.push_back(strWrong + "LP1 LP2比较");
-					errflag = 1;
-					//iStep = iEndStep;
-				}
-				else
-				{
-					m_alarmlist3.AddString(strRight + "LP1 LP2比较");
-					vecErr.push_back(strRight + "LP1 LP2比较");
-				}
-				MessAddString("LP3 LP2比较");
-				if (fabs(pdoc->airlist[airNo].f_s_lowpre - pdoc->airlist[airNo].s_lowpre) > 1.2f)//下降温度超过2度，表示传感器测试合格
-				{
-					CArchive outfile(&logFile, CArchive::store);
-					outfile.WriteString(GetCurTime()); outfile.WriteString(" LP3 LP2 压力差大\r\n");
-					outfile.Close();
-					m_alarmlist3.AddString(strWrong + "LP3 LP2比较");
-					vecErr.push_back(strWrong + "LP3 LP2比较");
-					errflag = 1;
-				}
-				else
-				{
-					m_alarmlist3.AddString(strRight + "LP3 LP2比较");
-					vecErr.push_back(strRight + "LP3 LP2比较");
-				}
-				if (stricmp(models_tag, "1600") == 0)
-				{
-					MessAddString("LP3 LP4比较");
-					if (fabs(pdoc->airlist[airNo].f_s_lowpre - pdoc->airlist[airNo].f_s_highpre) > 1.2f)//下降温度超过2度，表示传感器测试合格
-					{
-						CArchive outfile(&logFile, CArchive::store);
-						outfile.WriteString(GetCurTime()); outfile.WriteString(" LP3 LP4 压力差大\r\n");
-						outfile.Close();
-						m_alarmlist3.AddString(strWrong + "LP3 LP4比较");
-						vecErr.push_back(strWrong + "LP3 LP4比较");
+
+				MessAddString("检测拨码是否与机组型号一致");
+
+				// 定义拨码配置结构体（添加构造函数）
+				struct DIPSwitchConfig {
+					int value;              // 拨码值
+					int expectedValue;      // 期望值
+					CString name;           // 拨码名称
+					bool isSubBoard;        // 是否是副板
+
+					// 添加构造函数
+					DIPSwitchConfig(int v, int ev, const CString& n, bool sub)
+						: value(v), expectedValue(ev), name(n), isSubBoard(sub) {}
+				};
+
+				// 使用push_back逐个添加配置（VS2010兼容）
+				std::vector<DIPSwitchConfig> dipConfigs;
+
+				// 主板拨码配置
+				dipConfigs.push_back(DIPSwitchConfig(pdoc->airlist[airNo].sw11, 0, _T("SW1.1"), false));
+				dipConfigs.push_back(DIPSwitchConfig(pdoc->airlist[airNo].sw12, 0, _T("SW1.2"), false));
+				dipConfigs.push_back(DIPSwitchConfig(pdoc->airlist[airNo].sw13, 0, _T("SW1.3"), false));
+				dipConfigs.push_back(DIPSwitchConfig(pdoc->airlist[airNo].sw14, 0, _T("SW1.4"), false));
+				dipConfigs.push_back(DIPSwitchConfig(pdoc->airlist[airNo].sw15, 0, _T("SW1.5"), false));
+				dipConfigs.push_back(DIPSwitchConfig(pdoc->airlist[airNo].sw16, 0, _T("SW1.6"), false));
+				dipConfigs.push_back(DIPSwitchConfig(pdoc->airlist[airNo].sw17, 0, _T("SW1.7"), false));
+				dipConfigs.push_back(DIPSwitchConfig(pdoc->airlist[airNo].sw18, 1, _T("SW1.8"), false));
+
+				// 副板拨码配置
+				dipConfigs.push_back(DIPSwitchConfig(pdoc->airlist[airNo].sw11_f, 0, _T("SW1.1"), true));
+				dipConfigs.push_back(DIPSwitchConfig(pdoc->airlist[airNo].sw12_f, 0, _T("SW1.2"), true));
+				dipConfigs.push_back(DIPSwitchConfig(pdoc->airlist[airNo].sw13_f, 0, _T("SW1.3"), true));
+				dipConfigs.push_back(DIPSwitchConfig(pdoc->airlist[airNo].sw14_f, 0, _T("SW1.4"), true));
+				dipConfigs.push_back(DIPSwitchConfig(pdoc->airlist[airNo].sw15_f, 0, _T("SW1.5"), true));
+				dipConfigs.push_back(DIPSwitchConfig(pdoc->airlist[airNo].sw16_f, 0, _T("SW1.6"), true));
+				dipConfigs.push_back(DIPSwitchConfig(pdoc->airlist[airNo].sw17_f, 1, _T("SW1.7"), true));
+				dipConfigs.push_back(DIPSwitchConfig(pdoc->airlist[airNo].sw18_f, 0, _T("SW1.8"), true));
+
+				bool hasError = false;
+				CString errorLogContent;
+				CString successLogContent;
+
+				// 检查所有拨码
+				for (size_t i = 0; i < dipConfigs.size(); i++) {
+					const DIPSwitchConfig& config = dipConfigs[i];
+					CString fullName = config.isSubBoard ? _T("副板") + config.name : config.name;
+					CString logName = config.isSubBoard ? _T(" 副板") + config.name : _T(" ") + config.name;
+
+					if (config.value != config.expectedValue) {
+						// 拨码错误
+						CString errorMsg;
+						errorMsg.Format(_T("%s%s拨码错误\r\n"), GetCurTime(), logName);
+						errorLogContent += errorMsg;
+						m_alarmlist3.AddString(strWrong + fullName + _T("拨码"));
+						vecErr.push_back(strWrong + fullName + _T("拨码"));
 						errflag = 1;
-						//iStep = iEndStep;
+						hasError = true;
 					}
-					else
-					{
-						m_alarmlist3.AddString(strRight + "LP3 LP4比较");
-						vecErr.push_back(strRight + "LP3 LP4比较");
+					else {
+						// 拨码正确
+						CString successMsg;
+						successMsg.Format(_T("%s%s拨码正确\r\n"), GetCurTime(), logName);
+						successLogContent += successMsg;
+						m_alarmlist3.AddString(strRight + fullName + _T("拨码"));
+						vecErr.push_back(strRight + fullName + _T("拨码"));
 					}
+				}
+
+				// 写入日志文件
+				try {
+					if (logFile.m_hFile != CFile::hFileNull) {
+						CArchive outfile(&logFile, CArchive::store);
+						if (hasError) {
+							outfile.WriteString(errorLogContent);
+							iStep = iEndStep;
+						}
+						outfile.WriteString(successLogContent);
+						outfile.Close();
+					}
+				}
+				catch (CFileException* e) {
+					// 文件操作异常处理
+					TCHAR szError[1024];
+					e->GetErrorMessage(szError, 1024);
+					TRACE(_T("文件操作错误: %s\n"), szError);
+					e->Delete();
+				}
+
+				// 如果有错误，显示副板检测消息
+				if (hasError) {
+					MessAddString("检测副板拨码是否与机组型号一致");
 				}
 			}
 			if (iStep == 70 && (GetTickCount() - iLastTime) >= 50)

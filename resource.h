@@ -718,6 +718,7 @@
 #define IDC_EDIT1                       1473
 #define IDC_FTH14                       1473
 #define IDC_EDIT_O                      1474
+#define IDC_EDIT_N2                     1475
 #define ID_RUN                          32771
 #define ID_GLOBLE                       32772
 #define ID_CONNECTIN                    32774
