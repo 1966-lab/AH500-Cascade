@@ -95,5 +95,38 @@ and rename it to be MFCLOC.DLL.  ("XXX" stands for the language abbreviation.
 For example, MFC42DEU.DLL contains resources translated to German.)  If you
 don't do this, some of the UI elements of your application will remain in the
 language of the operating system.
+# AH500 Cascade
+
+AH500 Cascade is an open-source project designed for industrial cascade control systems and device communication.
+
+This project provides tools and reference implementations for controlling, testing, and debugging AH500 cascade systems used in industrial automation environments.
+
+It is intended to help engineers and developers efficiently integrate cascade controllers into their automation workflows.
+
+---
+
+## Features
+
+- Industrial cascade control logic
+- Device communication support
+- Data acquisition and monitoring
+- Debugging and testing tools
+- Modular and extensible code structure
+
+---
+
+## Use Cases
+
+This project can be used in the following scenarios:
+
+- Industrial automation testing
+- Cascade controller debugging
+- Device communication verification
+- Manufacturing system integration
+- Engineering development and experimentation
+
+---
+
+## Project Structure
 
 /////////////////////////////////////////////////////////////////////////////
